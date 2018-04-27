@@ -6,10 +6,21 @@
         while ($x = mysqli_fetch_assoc($sss)) {
             $type .= 'OR `type_hauler`=\'' . $x['type'] . '\'';
         }
-        $type = substr($type, 3);
-        $loading_time = mysqli_fetch_assoc(mysqli_query($db->connection, "SELECT AVG(`ob`) as `avg_ob`, AVG(`coal`) as `avg_coal` FROM `loading_time` WHERE `type_loader`='" . $data['type'] . "' AND (" . $type . ")"));
+        if (mysqli_num_rows($sss) > 0) {
+            $type = ' AND (' . substr($type, 3) . ')';
+        } else {
+            $type = '';
+        }
+        $loading_time = mysqli_fetch_assoc(mysqli_query($db->connection, "SELECT AVG(`ob`) as `avg_ob`, AVG(`coal`) as `avg_coal` FROM `loading_time` WHERE `type_loader`='" . $data['type'] . "'" . $type . ""));
 
-
+//
+        $cyc = mysqli_query($db->connection, "SELECT `tbhauler`.`type`, COUNT(`tbhauler`.`type`) as `count`,`coal`, `ob`, (COUNT(`tbhauler`.`type`)*`coal`) as `count_coal`, (COUNT(`tbhauler`.`type`)*`ob`) as `count_ob` FROM `set_fleet` LEFT JOIN `master_fleet` ON `set_fleet`.`id` = `master_fleet`.`id_fleet` LEFT JOIN `tbhauler` ON `master_fleet`.`cn_hauler` = `tbhauler`.`cn_hauler` LEFT JOIN `hauler_capacity` ON `tbhauler`.`type` = `hauler_capacity`.`type` WHERE `set_fleet`.`id` = '{$id}' GROUP BY `tbhauler`.`type`");
+        $no = 0;
+        while ($xx = mysqli_fetch_assoc($cyc)) {
+            $no++;
+            $sumob['ob' . $no] = $xx['count_ob'];
+            $sumcoal['coal' . $no] = $xx['count_coal'];
+        }
 
 //hitung cycle speed
 if (strtoupper($data['material']) == strtoupper('coal')) {
@@ -22,6 +33,11 @@ $cc_distance = number_format(($data['distance']*2)/1000, 2);
 $cc_travel = number_format((($data['distance']*2)/1000)/$data['speed'], 2);
 $cc_loading = number_format((2+$load)/60, 2);
 $cycle_speed = number_format($cc_distance/($cc_travel+$cc_loading), 2);
+
+
+//sum coal and ob kali type hauler 
+$sum_coal = array_sum($sumcoal);
+$sum_ob = array_sum($sumob);
 ?>
 <div class="content">
 <div class="container-fluid">
@@ -73,8 +89,13 @@ $cycle_speed = number_format($cc_distance/($cc_travel+$cc_loading), 2);
                                     <td>Act.</td>
                                     <th>
                                         <?php
-                                        echo number_format($cycle_speed/($cc_distance), 2);
-                                        echo number_format(number)
+                                        $cc_sd = number_format($cycle_speed/$cc_distance, 2);
+                                        if (strtoupper($data['material']) == strtoupper('coal')) {
+                                            $sum_sum = number_format($sum_coal, 2);
+                                        } else {
+                                            $sum_sum = number_format($sum_ob, 2);
+                                        }
+                                        echo number_format($cc_sd*$sum_sum, 3);
                                         ?>
                                     </th>
                                 </tr>
@@ -184,37 +205,63 @@ $cycle_speed = number_format($cc_distance/($cc_travel+$cc_loading), 2);
                             <table class="table">
                                 <tr>
                                     <?php
-
-                                    for ($i=0; $i < 24; $i++) { 
+                                    if ($data['shift'] == 1) {
+                                        $start_loop = 6;
+                                        $end_loop = 18;
+                                    } else {
+                                        $start_loop = 18;
+                                        $end_loop = 6;
+                                    }
+                                    for ($i=$start_loop; $i < $end_loop; $i++) { 
                                         if ($i < 10) {
                                             $i = '0'. $i;
                                         }
                                         echo '<th>' . $i . ':00</th>';
+                                        if ($data['shift'] == 1) {
+                                            $time_start = '06:00';
+                                        } else {
+                                            $time_start = '18:00';
+                                        }
+                                        $query[$i] = "SELECT `date`, `time`,`cn_hauler`,`status` FROM `master_fleet` WHERE `id_fleet`='{$id}' AND `time` BETWEEN '{$time_start}' AND '{$i}:59:59' GROUP BY `cn_hauler` DESC ORDER BY `id` ASC";
                                     }
                                     ?>
                                 </tr>
                                 <?php
-                                $sq = mysqli_query($db->connection, "SELECT `time`, `cn_hauler`, `status` FROM `master_fleet` WHERE `id_fleet`='1'  ORDER BY `id` ASC");
-                                while ($dd = mysqli_fetch_assoc($sq)) {
-                                    echo '<tr>';
-                                    for ($i=0; $i < 24; $i++) { 
-                                        if ($i < 10) {
-                                            $i = '0'. $i;
-                                        }
-                                        echo '<td>';
-                                            if ($dd['time'] <= $i . ':59:59') {
-                                                if ($dd['status'] == 'available') {
-                                                    $dump = $dd['cn_hauler'];
-                                                } else {
-                                                    $dump = "";
-                                                }
-                                            } else {
-                                                $dump = "";
-                                            }
-                                        echo $dd['time'] . '<=' . $i . ':59:59' . $dump . '</td>';
-                                    }
-                                    echo '</tr>';
+
+                                $qq = mysqli_num_rows(mysqli_query($db->connection, "SELECT `cn_hauler` as `count` FROM `master_fleet` WHERE `id_fleet`='{$id}' GROUP BY `cn_hauler` ORDER BY `id` ASC"));
+                                if ($data['shift'] == 1) {
+                                    $_06 = $query['06'];
+                                    $_07 = $query['07'];
+                                    $_08 = $query['08'];
+                                    $_09 = $query['09'];
+                                    $_10 = $query['10'];
+                                    $_11 = $query['11'];
+                                    $_12 = $query['12'];
+                                    $_13 = $query['13'];
+                                    $_14 = $query['14'];
+                                    $_15 = $query['15'];
+                                    $_16 = $query['16'];
+                                    $_17 = $query['17'];
+                                } else {
+                                    $_18 = $query['18'];
+                                    $_19 = $query['19'];
+                                    $_20 = $query['20'];
+                                    $_21 = $query['21'];
+                                    $_22 = $query['22'];
+                                    $_23 = $query['23'];
+                                    $_00 = $query['00'];
+                                    $_01 = $query['01'];
+                                    $_02 = $query['02'];
+                                    $_03 = $query['03'];
+                                    $_04 = $query['04'];
+                                    $_05 = $query['05'];
                                 }
+
+                                $dx = mysqli_query($db->connection, $_17);
+                                while ($data = mysqli_fetch_assoc($dx)) {
+                                    echo '<tr><td>' . $data['cn_hauler'] . '</td></tr>';
+                                }
+                                
                                 ?>
 
                                 

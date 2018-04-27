@@ -83,7 +83,9 @@ $(document).ready(function() {
                 } else {
                     var geting;
                     $.each(jd.data, function(){
-                        geting += '<tr><td>' + this['no'] + '</td><td>' + this['hauler'] + '</td><td><button type="button" aria-hidden="true" class="close" data-id="' + this['id'] + '" id="delete">×</button></td></tr>';
+                        if (this['status'] == 'available') {
+                            geting += '<tr><td>' + this['no'] + '</td><td>' + this['hauler'] + '</td><td><button type="button" aria-hidden="true" class="close" data-id="' + this['id'] + '" id="delete">×</button></td></tr>';
+                        }
                     });
                     $('#setLoad').html(geting);
                 }
@@ -103,7 +105,9 @@ $(document).ready(function() {
                         } else {
                             var geting;
                             $.each(jd.data, function(){
-                                geting += '<tr><td>' + this['no'] + '</td><td>' + this['hauler'] + '</td><td><button type="button" aria-hidden="true" class="close" data-id="' + this['id'] + '" id="delete">×</button></td></tr>';
+                                if (this['status'] == 'available') {
+                                    geting += '<tr><td>' + this['no'] + '</td><td>' + this['hauler'] + '</td><td><button type="button" aria-hidden="true" class="close" data-id="' + this['id'] + '" id="delete">×</button></td></tr>';
+                                }
                             });
                             $('#setLoad').html(geting);
                         }
@@ -130,7 +134,9 @@ $(document).ready(function() {
                         } else {
                             var geting;
                             $.each(jd.data, function(){
-                                geting += '<tr><td>' + this['no'] + '</td><td>' + this['hauler'] + '</td><td><button type="button" aria-hidden="true" class="close" data-id="' + this['id'] + '" id="delete">×</button></td></tr>';
+                                if (this['status'] == 'available') {
+                                    geting += '<tr><td>' + this['no'] + '</td><td>' + this['hauler'] + '</td><td><button type="button" aria-hidden="true" class="close" data-id="' + this['id'] + '" id="delete">×</button></td></tr>';
+                                }
                             });
                             $('#setLoad').html(geting);
                         }
