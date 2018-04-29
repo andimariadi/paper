@@ -168,7 +168,7 @@ if (empty($_SESSION)) {
                 <input type="hidden" name="id" id="id_fleet" value="">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Hauler</label>
-                    <input type="text" name="hauler" class="form-control" placeholder="Add Hauler" id="fleet_set" />
+                    <input type="text" name="hauler" class="form-control" placeholder="Add Hauler" id="fleet_set" required autocomplete="off" />
                 </div>
                 <a href="#" id="saved" class="btn btn-primary"><i class="ti-plus"></i> Add Hauler</a>
             </div>

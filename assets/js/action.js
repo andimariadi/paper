@@ -137,6 +137,40 @@ $(document).ready(function() {
             });
         });
 
+        $("#fleet_set").keypress(function(e) {
+            if(e.which == 13) {
+                var data = $(this).val()
+                if (data != '') {
+                var id = $("#id_fleet").val();
+                $.ajax({
+                    type: "POST",
+                    data: 'hauler=' + data + '&id=' + id,
+                    url: 'json/PostFleetLoader.php',
+                    success: function(response) {
+                        var get = $("#id_fleet").val();
+                        $.getJSON('json/GetFleetLoader.php?id=' + get, function(jd) {
+                            if (jd.data == 'empty') {
+                                $('#setLoad').html('<tr><td colspan="3">Fields empty</td></tr>');
+                            } else {
+                                var geting;
+                                $.each(jd.data, function(){
+                                    if (this['status'] == 'available') {
+                                        geting += '<tr><td>' + this['no'] + '</td><td>' + this['hauler'] + '</td><td><button type="button" aria-hidden="true" class="close" hauler-id="' + this['hauler'] + '" data-id="' + get + '" id="delete">×</button></td></tr>';
+                                    }
+                                });
+                                $('#setLoad').html(geting);
+                            }
+                        });
+                        getControl();
+                    },
+                    error: function () {
+                        console.log("errr");
+                    }
+                });
+                }
+            }
+        });
+
         $(document).on('click', '#delete', function() {
             var id = $(this).attr('data-id');
             var hauler = $(this).attr('hauler-id');

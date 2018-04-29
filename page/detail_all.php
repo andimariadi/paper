@@ -434,17 +434,21 @@ $dev_speed = empty($dev_speed) ? 0 : $dev_speed;
                                     echo '<tr><td align="center">' . $data['cn_hauler'] . '</td></tr>';
                                 }
                             }
-                            echo '<div id="jumlah_row" data-id="' . $jumlah_data . '"></div>';
                             ?>
                         </thead>
+                        <?php echo '<tbody id="jumlah_row' . $no . '" data-id="' . $jumlah_data . '"></tbody>';?>
                     </table>
                     </div>
             </div>
-            <?php } ?>
+            <?php }
+
+            ?>
             </div>
         </div>
     </div>
 </div>
+
+
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -454,5 +458,18 @@ $dev_speed = empty($dev_speed) ? 0 : $dev_speed;
             text += '<tr><td align="center">' + i + '<td></td>';
         }
         $("#jumlah_hauler").html(text);
+
+        <?php 
+        for($i = 1; $i <= $no; $i++) {
+        ?>
+        var row = $("#jumlah_row<?php echo $i;?>").attr('data-id');
+        var total = <?php echo max($hauler);?>-row;
+        var texts;
+        texts = '';
+        for (var i = 0; i < total; i++) {
+            texts += '<tr><td align="center">&nbsp;<td></td>';
+        }
+        $("#jumlah_row<?php echo $i;?>").html(texts);
+        <?php } ?>
     });
 </script>
