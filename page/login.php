@@ -9,7 +9,7 @@ if (isset($_POST['login'])) {
       $_SESSION['iduser'] = $verif['id'];
       $_SESSION['username'] = $verif['username'];
       //$_SESSION['password'] = $verif['password'];
-      $_SESSION['level'] = $verif['type'];
+      //$_SESSION['level'] = $verif['type'];
       echo '<script type="text/javascript">
               window.location.assign("index.php?home");
             </script>';

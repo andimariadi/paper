@@ -115,7 +115,6 @@ $(document).ready(function() {
                 data: 'hauler=' + data + '&id=' + id,
                 url: 'json/PostFleetLoader.php',
                 success: function(response) {
-                    alert(response);
                     var get = $("#id_fleet").val();
                     $.getJSON('json/GetFleetLoader.php?id=' + get, function(jd) {
                         if (jd.data == 'empty') {

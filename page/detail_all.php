@@ -242,7 +242,7 @@ $prodty_fleet_cap = empty($prodty_fleet_cap) ? 0 : $prodty_fleet_cap;
 
 
 //act
-$prodty_fleet_act = number_format($cc_sd*$sum_sum, 0);
+$prodty_fleet_act = number_format(floatval($cc_sd)*floatval($sum_sum), 0);
 $prodty_fleet_act = str_replace(',', '', $prodty_fleet_act);
 $prodty_fleet_act = empty($prodty_fleet_act) ? 0 : $prodty_fleet_act;
 
@@ -397,13 +397,15 @@ $dev_speed = empty($dev_speed) ? 0 : $dev_speed;
                             <?php
                             $data_id = $data['id'];
                             $loader = $data['cn_loader'];
-                            $sa = "SELECT `date`, `time`,`cn_hauler`,`status` FROM `master_fleet` WHERE (`id_fleet`='" . $data_id . "' AND `date` = '" . $date . "'
+                            $sa = "SELECT `id`,`date`, `time`,`cn_hauler`, (SELECT a.status FROM master_fleet a WHERE a.id_fleet = master_fleet.id_fleet AND a.cn_hauler = master_fleet.cn_hauler ORDER BY a.id DESC LIMIT 1) as `status` FROM `master_fleet` WHERE (`id_fleet`='" . $data_id . "' AND `date` = '" . $date . "'
                              AND `time` >= '{$time}') AND (`id_fleet`='" . $data_id . "' AND `date` = '" . $date . "' AND `time` <= '{$time2}') GROUP BY `cn_hauler` DESC ORDER BY `id` ASC";
                             $xx = mysqli_query($db->connection, $sa);
                             if (mysqli_num_rows($xx) > 0) {
                                 $s = "";
                                 while ($d = mysqli_fetch_assoc($xx)) {
-                                    $s .= " OR `cn_hauler` = '" . $d['cn_hauler'] . "'";
+                                    if ($d['status'] == 'available') {
+                                        $s .= " OR `cn_hauler` = '" . $d['cn_hauler'] . "'";
+                                    }
                                 }
                                 $fix_fleets = 'AND (' . substr($s, 4) . ')';
                             } else {
@@ -413,12 +415,13 @@ $dev_speed = empty($dev_speed) ? 0 : $dev_speed;
                             //cek jumlah hauler fleet fix
                             $plan_fix_fleet = "SELECT `cn_hauler` FROM `tbhauler` where `fix_fleet`='" . $loader . "'";
                             $count_plan_fleet = mysqli_num_rows(mysqli_query($db->connection, $plan_fix_fleet));
-
+                            
                             //cek jumlah hauler actual sesuai fleet
                             $act_fix_fleet = empty($fix_fleets) ? "SELECT `cn_hauler` FROM `tbhauler` where `fix_fleet`='" . $loader . "'" : "SELECT `cn_hauler` FROM `tbhauler` where `fix_fleet`='" . $loader . "' {$fix_fleets}";
                             $sql_fix = empty($fix_fleets) ? 0 : mysqli_query($db->connection, $act_fix_fleet);
                             $count_act_fleet = empty($sql_fix) ? 0 : mysqli_num_rows($sql_fix);
                             $count_plan_fleet = $count_plan_fleet == 0 ? 1 : $count_plan_fleet;
+
                             
                             echo '<tr><td align="center"><strong>Acc: ' . number_format(($count_act_fleet/$count_plan_fleet) * 100, 1) . ' %</strong></td></tr>';
 
@@ -431,6 +434,7 @@ $dev_speed = empty($dev_speed) ? 0 : $dev_speed;
                                     echo '<tr><td align="center">' . $data['cn_hauler'] . '</td></tr>';
                                 }
                             }
+                            echo '<div id="jumlah_row" data-id="' . $jumlah_data . '"></div>';
                             ?>
                         </thead>
                     </table>

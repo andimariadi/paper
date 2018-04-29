@@ -18,6 +18,7 @@ LEFT JOIN `travel_speed` ON `set_fleet`.`jalur` = `travel_speed`.`id_jalur` WHER
 
         //sql loading time
         $sss = $db->query("SELECT `master_fleet`.`cn_hauler`, `type`, COUNT(`type`) as `total` FROM `master_fleet` LEFT JOIN `tbhauler` ON `master_fleet`.`cn_hauler` = `tbhauler`.`cn_hauler` WHERE `master_fleet`.`id_fleet` = '{$id}' GROUP BY `type`");
+        $type = "";
         while ($x = mysqli_fetch_assoc($sss)) {
             $type .= 'OR `type_hauler`=\'' . $x['type'] . '\'';
         }
@@ -72,8 +73,9 @@ if (strtoupper($data['material']) == strtoupper('coal')) {
 } else {
     $prodty_fleet_cap = $data['ob'];
 }
+
 //act
-$prodty_fleet_act = number_format($cc_sd*$sum_sum, 0);
+$prodty_fleet_act = number_format(floatval($cc_sd)*floatval($sum_sum), 0);
 $prodty_fleet_act = str_replace(',', '', $prodty_fleet_act);
 
 
@@ -224,6 +226,10 @@ $matching_factor = number_format($prodty_fleet_act/$prodty_fleet_cap, 2);
                                     <th><?php echo $data['disposal'];?></th>
                                 </tr>
                                 <tr>
+                                    <td colspan="2">Supervisor </td>
+                                    <th><?php echo $data['spv'];?></th>
+                                </tr>
+                                <tr>
                                     <td rowspan="2">Group Leader</td>
                                     <td>Front</td>
                                     <th><?php echo $data['gl_front'];?></th>
@@ -288,7 +294,7 @@ $matching_factor = number_format($prodty_fleet_act/$prodty_fleet_cap, 2);
                                 $next_date = $i > 23 ? date('Y-m-d', strtotime($data['date'] . '+1 days')) : $date;
                                 echo '<div class="col-xs-1" style="padding: 0;border-left: 1px solid #CCC5B9;border-bottom: 1px solid #CCC5B9;border-right: 1px solid #CCC5B9;"><table class="table" style="margin-bottom: 0;"><tr><th>' . $num . ':00</th></tr>';
 //
-                                $sa = "SELECT `date`, `time`,`cn_hauler`,MAX(`status`) as `status` FROM `master_fleet` WHERE (`id_fleet`='{$id}' AND `date` = '" . $date . "' AND `time` >= '{$time_start}') AND (`id_fleet`='{$id}' AND `date` = '" . $next_date . "' AND `time` <= '{$num}:59:59') GROUP BY `cn_hauler` DESC ORDER BY `id` ASC";
+                                $sa = "SELECT `id`,cast(concat(`date`, ' ', `time`) as datetime) as dt,`cn_hauler`, (SELECT a.status FROM master_fleet a WHERE a.id_fleet = master_fleet.id_fleet AND a.cn_hauler = master_fleet.cn_hauler AND cast(concat(a.date, ' ', a.time) as datetime) BETWEEN '" . $date . " {$time_start}' AND '" . $next_date . " {$num}:59:59' ORDER BY a.id DESC LIMIT 1) as `status` FROM `master_fleet` WHERE `id_fleet`='{$id}'  AND cast(concat(`date`, ' ', `time`) as datetime) BETWEEN '" . $date . " {$time_start}' AND '" . $next_date . " {$num}:59:59' GROUP BY `cn_hauler` DESC ORDER BY `id` ASC";
                                 $xx = mysqli_query($db->connection, $sa);
                                 if (mysqli_num_rows($xx) > 0) {
                                     $s = "";

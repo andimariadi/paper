@@ -4,7 +4,7 @@ $db = new crud();
 
 if (isset($_GET['id'])) {
   $id = addslashes($_GET['id']);
-  $query = "SELECT `id`,`date`, `time`,`cn_hauler`,MAX(`status`) as `status` FROM `master_fleet` WHERE `id_fleet`='{$id}' GROUP BY `cn_hauler` DESC ORDER BY `id` ASC";
+  $query = "SELECT `id`,`date`, `time`,`cn_hauler`, (SELECT a.status FROM master_fleet a WHERE a.id_fleet = master_fleet.id_fleet AND a.cn_hauler = master_fleet.cn_hauler ORDER BY a.id DESC LIMIT 1) as `status` FROM `master_fleet` WHERE `id_fleet`='{$id}' GROUP BY `cn_hauler` ASC ORDER BY `id` ASC";
 }
 
 $hasil = mysqli_query($db->connection, $query);

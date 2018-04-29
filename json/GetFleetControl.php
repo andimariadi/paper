@@ -1,10 +1,10 @@
 <?php
 require '../system/crud.php';
 $db = new crud();
-$pit = $_GET['pit'];
-$ds = $_GET['ds'];
-$time = $_GET['time'];
-$time2 = $_GET['time2'];
+$pit = empty($_GET['pit']) ? '' : $_GET['pit'];
+$ds = empty($_GET['ds']) ? date('Y-m-d') : $_GET['ds'];
+$time = empty($_GET['time']) ? '00:00:00' : $_GET['time'];
+$time2 = empty($_GET['time2']) ? '23:59:59' : $_GET['time2'];
 $id_pit = mysqli_fetch_assoc(mysqli_query($db->connection, "SELECT `id` FROM `enum` WHERE `name`='" . urldecode($pit) . "' AND `type`='pit'"));
 $id = $id_pit['id'];
 if (empty($pit)) {
@@ -21,7 +21,9 @@ if(mysqli_num_rows($hasil) > 0 ){
   $response["data"] = array();
   $no = 0;
   while($x = mysqli_fetch_array($hasil)){
-    $dd = mysqli_query($db->connection, "SELECT `cn_hauler`, MAX(`status`) as `status` FROM `master_fleet` WHERE `id_fleet`='{$x["id"]}' GROUP BY `cn_hauler` ASC ORDER BY `id` ASC");
+    $dd = mysqli_query($db->connection, "SELECT `id`,`date`, `time`,`cn_hauler`, (SELECT a.status FROM master_fleet a WHERE a.id_fleet = master_fleet.id_fleet AND a.cn_hauler = master_fleet.cn_hauler ORDER BY a.id DESC LIMIT 1) as `status` FROM `master_fleet` WHERE `id_fleet`='{$x["id"]}' GROUP BY `cn_hauler` ASC ORDER BY `id` ASC");
+    $no++;
+    $h['no'] = $no;
     $h['id'] = $x["id"];
   	$h['loader'] = $x["cn_loader"];
     $h['pit'] = $x["pit"];
@@ -32,8 +34,6 @@ if(mysqli_num_rows($hasil) > 0 ){
       $s = "";
       while ($d = mysqli_fetch_assoc($dd)) {
         if ($d['status'] == 'available') {
-          $no++;
-          $h['no'] = $no;
           $s .= ", " . $d['cn_hauler'];
         }
       }

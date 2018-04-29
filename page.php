@@ -79,5 +79,8 @@ $db = new crud();
     break;
   }
   ?>
+  <script type="text/javascript">
+    showNotification()
+  </script>
 </div>
 </body>
