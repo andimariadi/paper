@@ -25,6 +25,8 @@ if (isset($_POST['loader'])) {
     $series = addslashes($_POST['series']);
     $distance = addslashes($_POST['distance']);
     $sql = $db->insert('set_fleet', array('id' => '','date' => $date,'time' => $time,'shift' => $shift,'cn_loader' => $loader,'speed' => $speed,'status' => $status,'pit' => $pit,'jalur' => $jalur, 'area' => $area, 'disposal' => $disp,'coal_seam' => $seam, 'material' => $material,'coal_series' => $series, 'spv' => $spv,'gl_front' => $gl_front,'gl_disp' => $gl_disp, 'distance' => $distance));
+    $last_id = mysqli_insert_id($db->connection);
+    $sql = $db->insert('dispatch_fleet', array('id_dispatch' => $_SESSION['iduser'],'id_fleet' => $last_id));
   if (!$sql) {
     echo 'success';
   } else {

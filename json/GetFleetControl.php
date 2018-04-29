@@ -21,9 +21,7 @@ if(mysqli_num_rows($hasil) > 0 ){
   $response["data"] = array();
   $no = 0;
   while($x = mysqli_fetch_array($hasil)){
-    $dd = mysqli_query($db->connection, "SELECT `cn_hauler` FROM `master_fleet` WHERE `id_fleet`='{$x["id"]}' AND `status`='available'  GROUP BY `cn_hauler` ASC ORDER BY `id` ASC");
-    $no++;
-    $h['no'] = $no;
+    $dd = mysqli_query($db->connection, "SELECT `cn_hauler`, MAX(`status`) as `status` FROM `master_fleet` WHERE `id_fleet`='{$x["id"]}' GROUP BY `cn_hauler` ASC ORDER BY `id` ASC");
     $h['id'] = $x["id"];
   	$h['loader'] = $x["cn_loader"];
     $h['pit'] = $x["pit"];
@@ -33,9 +31,13 @@ if(mysqli_num_rows($hasil) > 0 ){
     if (mysqli_num_rows($dd) > 0) {
       $s = "";
       while ($d = mysqli_fetch_assoc($dd)) {
-        $s .= ", " . $d['cn_hauler'];
+        if ($d['status'] == 'available') {
+          $no++;
+          $h['no'] = $no;
+          $s .= ", " . $d['cn_hauler'];
+        }
       }
-      $h['hauler'] = substr($s, 2, 30) . '...';
+      $h['hauler'] = substr($s, 2, 31) . '...';
     } else {
       $s = "";
       $h['hauler'] = $s;

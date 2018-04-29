@@ -2,38 +2,6 @@
 $id_pit = mysqli_fetch_assoc(mysqli_query($db->connection, "SELECT `id` FROM `enum` WHERE `name`='" . urldecode($pit) . "' AND `type`='pit'"));
 $id_pit = $id_pit['id'];
 $notif = "";
-if (isset($_POST['save'])) {
-    $shift = 1;
-    $date = date('Y-m-d');
-    $time = date('H:i:s');
-    $loader = addslashes($_POST['loader']);
-    $status = addslashes($_POST['status']);
-    $speed = addslashes($_POST['speed']);
-    $pit = addslashes($_POST['pit']);
-    $material = addslashes($_POST['material']);
-    $jalur = addslashes($_POST['jalur']);
-    $disp = addslashes($_POST['disp']);
-    $spv = addslashes($_POST['spv']);
-    $gl_front = addslashes($_POST['gl_front']);
-    $gl_disp = addslashes($_POST['gl_disp']);
-    $seam = addslashes($_POST['seam']);
-    $series = addslashes($_POST['series']);
-    $distance = addslashes($_POST['distance']);
-    $sql = $db->insert('set_fleet', array('id' => '','date' => $date,'time' => $time,'shift' => $shift,'cn_loader' => $loader,'speed' => $speed,'status' => $status,'pit' => $pit,'jalur' => $jalur, 'disposal' => $disp,'coal_seam' => $seam,'coal_series' => $series, 'spv' => $spv,'gl_front' => $gl_front,'gl_disp' => $gl_disp, 'distance' => $distance));
-    if (!$sql) {
-        $notif = '<div class="alert alert-success">
-                                    <button type="button" aria-hidden="true" class="close">×</button>
-                                    <span><b> Success - </b> Your field saved</span>
-                                </div>';
-    } else {
-        $notif = '<div class="alert alert-danger">
-                                    <button type="button" aria-hidden="true" class="close">×</button>
-                                    <span><b> Failed - </b> No saved</span>
-                                </div>';
-    }
-}
-unset($_POST);
-
 ?>
 <div class="content">
 <div class="container-fluid">
@@ -220,6 +188,13 @@ unset($_POST);
                             <tbody id="fleet_load">
                             </tbody>
                         </table>
+                        <?php
+                            if (empty($pit) AND empty($ds) AND empty($time) AND empty($time2)) {
+                                echo '<a href="?fleet_all" class="btn btn-primary">View All Fleet</a>';
+                            } else {
+                                echo '<a href="?fleet_all&' . $pit . '&' . $ds . '&' . $time . '&' . $time2 . '" class="btn btn-primary">View All Fleet</a>';
+                            }
+                        ?>
                     </div>
                 </div>
             </div>

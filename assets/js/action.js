@@ -1,4 +1,20 @@
 $(document).ready(function() {
+    function showNotification(){
+        color = Math.floor((Math.random() * 4) + 1);
+
+        $.notify({
+            icon: "ti-gift",
+            message: "<b>Failed!</b> - Username or Password not valid!"
+
+        },{
+            type: type[color],
+            timer: 4000,
+            placement: {
+                from: 'top',
+                align: 'center'
+            }
+        });
+    }
     function getUrlParameter(anu) {
         var sPageURL = decodeURIComponent(window.location.search.substring(1)),
             sURLVariables = sPageURL.split('&'),
@@ -21,7 +37,7 @@ $(document).ready(function() {
                 } else {
                     var geting;
                     $.each(jd.data, function(){
-                        geting += '<tr><td>' + this['no'] + '</td><td><strong><a href="#" data-toggle="modal" data-target="#exampleModal" data-id="' + this['id'] + '" data-cn="' + this['loader'] + '" id="load_act">' + this['loader'] + '</a></strong></td><td>' + this['pit'] + '</td><td>' + this['jalur'] + '</td><td>' + this['area'] + '</td><td>' + this['hauler'] + '</td><td><a href="?detail&' + this['id'] + '" class="btn btn-success btn-sm"><i class="ti-list"></i> Detail</a><a href="#" class="btn btn-primary btn-sm" data-id="' + this['id'] + '" id="edit"><i class="ti-pencil"></i> Edit</a><a href="#" class="btn btn-danger btn-sm" id="del_fleet" data-id="' + this['id'] + '"><i class="ti-trash"></i> Delete</a></td></tr>';
+                        geting += '<tr><td>' + this['no'] + '</td><td><strong><a href="#" data-toggle="modal" data-target="#exampleModal" data-id="' + this['id'] + '" data-cn="' + this['loader'] + '" id="load_act">' + this['loader'] + '</a></strong></td><td>' + this['pit'] + '</td><td>' + this['jalur'] + '</td><td>' + this['area'] + '</td><td>' + this['hauler'] + '</td><td><a href="?fleet_detail&' + this['id'] + '" class="btn btn-success btn-sm"><i class="ti-list"></i> Detail</a><a href="#" class="btn btn-primary btn-sm" data-id="' + this['id'] + '" id="edit"><i class="ti-pencil"></i> Edit</a><a href="#" class="btn btn-danger btn-sm" id="del_fleet" data-id="' + this['id'] + '"><i class="ti-trash"></i> Delete</a></td></tr>';
                     });
                     $('#fleet_load').html(geting);
                 }
@@ -33,7 +49,7 @@ $(document).ready(function() {
                 } else {
                     var geting;
                     $.each(jd.data, function(){
-                        geting += '<tr><td>' + this['no'] + '</td><td><strong><a href="#" data-toggle="modal" data-target="#exampleModal" data-id="' + this['id'] + '" data-cn="' + this['loader'] + '" id="load_act">' + this['loader'] + '</a></strong></td><td>' + this['pit'] + '</td><td>' + this['jalur'] + '</td><td>' + this['area'] + '</td><td>' + this['hauler'] + '</td><td><a href="?detail&' + this['id'] + '" class="btn btn-success btn-sm"><i class="ti-list"></i> Detail</a><a href="#" class="btn btn-primary btn-sm" data-id="' + this['id'] + '" id="edit"><i class="ti-pencil"></i> Edit</a><a href="#" class="btn btn-danger btn-sm" id="del_fleet" data-id="' + this['id'] + '"><i class="ti-trash"></i> Delete</a></td></tr>';
+                        geting += '<tr><td>' + this['no'] + '</td><td><strong><a href="#" data-toggle="modal" data-target="#exampleModal" data-id="' + this['id'] + '" data-cn="' + this['loader'] + '" id="load_act">' + this['loader'] + '</a></strong></td><td>' + this['pit'] + '</td><td>' + this['jalur'] + '</td><td>' + this['area'] + '</td><td>' + this['hauler'] + '</td><td><a href="?fleet_detail&' + this['id'] + '" class="btn btn-success btn-sm"><i class="ti-list"></i> Detail</a><a href="#" class="btn btn-primary btn-sm" data-id="' + this['id'] + '" id="edit"><i class="ti-pencil"></i> Edit</a><a href="#" class="btn btn-danger btn-sm" id="del_fleet" data-id="' + this['id'] + '"><i class="ti-trash"></i> Delete</a></td></tr>';
                     });
                     $('#fleet_load').html(geting);
                 }
@@ -84,7 +100,7 @@ $(document).ready(function() {
                     var geting;
                     $.each(jd.data, function(){
                         if (this['status'] == 'available') {
-                            geting += '<tr><td>' + this['no'] + '</td><td>' + this['hauler'] + '</td><td><button type="button" aria-hidden="true" class="close" data-id="' + this['id'] + '" id="delete">×</button></td></tr>';
+                            geting += '<tr><td>' + this['no'] + '</td><td>' + this['hauler'] + '</td><td><button type="button" aria-hidden="true" class="close" hauler-id="' + this['hauler'] + '" data-id="' + id + '" id="delete">×</button></td></tr>';
                         }
                     });
                     $('#setLoad').html(geting);
@@ -92,12 +108,14 @@ $(document).ready(function() {
             });
         });
         $(document).on('click', '#saved', function() {
-            var data = $("#fleet_set").serialize()
+            var data = $("#fleet_set").val()
+            var id = $("#id_fleet").val();
             $.ajax({
                 type: "POST",
-                data: data,
+                data: 'hauler=' + data + '&id=' + id,
                 url: 'json/PostFleetLoader.php',
                 success: function(response) {
+                    alert(response);
                     var get = $("#id_fleet").val();
                     $.getJSON('json/GetFleetLoader.php?id=' + get, function(jd) {
                         if (jd.data == 'empty') {
@@ -106,7 +124,7 @@ $(document).ready(function() {
                             var geting;
                             $.each(jd.data, function(){
                                 if (this['status'] == 'available') {
-                                    geting += '<tr><td>' + this['no'] + '</td><td>' + this['hauler'] + '</td><td><button type="button" aria-hidden="true" class="close" data-id="' + this['id'] + '" id="delete">×</button></td></tr>';
+                                    geting += '<tr><td>' + this['no'] + '</td><td>' + this['hauler'] + '</td><td><button type="button" aria-hidden="true" class="close" hauler-id="' + this['hauler'] + '" data-id="' + get + '" id="delete">×</button></td></tr>';
                                 }
                             });
                             $('#setLoad').html(geting);
@@ -122,9 +140,10 @@ $(document).ready(function() {
 
         $(document).on('click', '#delete', function() {
             var id = $(this).attr('data-id');
+            var hauler = $(this).attr('hauler-id');
             $.ajax({
                 type: "POST",
-                data: 'id=' + id,
+                data: 'id=' + id + '&hauler=' + hauler,
                 url: 'json/DeleteFleetLoader.php',
                 success: function(response) {
                     var get = $("#id_fleet").val();
@@ -135,7 +154,7 @@ $(document).ready(function() {
                             var geting;
                             $.each(jd.data, function(){
                                 if (this['status'] == 'available') {
-                                    geting += '<tr><td>' + this['no'] + '</td><td>' + this['hauler'] + '</td><td><button type="button" aria-hidden="true" class="close" data-id="' + this['id'] + '" id="delete">×</button></td></tr>';
+                                    geting += '<tr><td>' + this['no'] + '</td><td>' + this['hauler'] + '</td><td><button type="button" aria-hidden="true" class="close" hauler-id="' + this['hauler'] + '" data-id="' + get + '" id="delete">×</button></td></tr>';
                                 }
                             });
                             $('#setLoad').html(geting);

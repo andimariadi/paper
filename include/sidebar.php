@@ -13,28 +13,28 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li<?php if ($page == 'fleet') { echo ' class="active"';} ?>>
+                <li<?php if (substr($page, 0, 5) == 'fleet') { echo ' class="active"';} ?>>
                     <a href="?fleet">
                         <i class="ti-stats-up"></i>
                         <p>Fleet Control</p>
                     </a>
                 </li>
-                <li>
-                    <a href="#">
+                <li<?php if ($page == 'user') { echo ' class="active"';} ?>>
+                    <a href="?user">
                         <i class="ti-user"></i>
                         <p>User Profile</p>
                     </a>
                 </li>
-                <li>
-                    <a href="#">
+                <li<?php if ($page == 'list') { echo ' class="active"';} ?>>
+                    <a href="?list">
                         <i class="ti-view-list-alt"></i>
-                        <p>Table List</p>
+                        <p>List FLeet Control</p>
                     </a>
                 </li>
-                <li>
-                    <a href="#">
-                        <i class="ti-text"></i>
-                        <p>Typography</p>
+                <li<?php if (substr($page, 0, 6) == 'hauler') { echo ' class="active"';} ?>>
+                    <a href="?hauler">
+                        <i class="ti-truck"></i>
+                        <p>Haulers</p>
                     </a>
                 </li>
                 <li>
@@ -53,6 +53,12 @@
                     <a href="#">
                         <i class="ti-bell"></i>
                         <p>Notifications</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="logout.php">
+                        <i class="ti-shift-left"></i>
+                        <p>Logout</p>
                     </a>
                 </li>
             </ul>

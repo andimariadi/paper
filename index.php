@@ -7,12 +7,14 @@ $db = new crud();
 $page = explode('?', $_SERVER['REQUEST_URI'], 2);
 $page = empty($page[1]) ? $page[0] : $page[1];
 $adev = explode('&', $page);
-//print_r($adev);
 
 $pit = empty($adev[1]) ? null : $adev[1];
 $ds = empty($adev[2]) ? null : $adev[2];
 $time = empty($adev[3]) ? null : $adev[3];
 $time2 = empty($adev[4]) ? null : $adev[4];
+if (empty($_SESSION)) {
+    header('location: page.php?login');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -72,7 +74,6 @@ $time2 = empty($adev[4]) ? null : $adev[4];
 
 
       <?php
-      
       switch($page){
         default:
           include "page/home.php"; 
@@ -89,12 +90,33 @@ $time2 = empty($adev[4]) ? null : $adev[4];
         case "fleet&{$pit}&{$ds}&{$time}&{$time2}":
             include "page/fleet_control.php";
         break; 
-        case "detail":
+        case "fleet_detail":
             include "page/detail_control.php";
         break; 
-        case "detail&{$pit}":
+        case "fleet_detail&{$pit}":
             include "page/detail_control.php";
         break; 
+        case "user":
+            include "page/user.php";
+        break;
+        case "list":
+            include "page/list_fleet_user.php";
+        break;
+        case "list&{$pit}":
+            include "page/list_fleet_user.php";
+        break;
+        case "hauler":
+            include "page/list_hauler.php";
+        break;
+        case "hauler&{$pit}":
+            include "page/list_hauler.php";
+        break;
+        case "fleet_all":
+            include "page/detail_all.php";
+        break;
+        case "fleet_all&{$pit}&{$ds}&{$time}&{$time2}":
+            include "page/detail_all.php";
+        break;
       }
       ?>
         <!-- partial:partials/_footer.html -->
@@ -121,7 +143,7 @@ $time2 = empty($adev[4]) ? null : $adev[4];
                     </ul>
                 </nav>
                 <div class="copyright pull-right">
-                    &copy; <script>document.write(new Date().getFullYear())</script>, made with <i class="fa fa-heart heart"></i> by <a href="http://www.creative-tim.com">Creative Tim</a>
+                    Copyright &copy; <script>document.write(new Date().getFullYear())</script> with <i class="fa fa-heart heart"></i> by <a href="http://github.com/andimariadi">Andi Mariadi</a>
                 </div>
             </div>
         </footer>
@@ -143,21 +165,12 @@ $time2 = empty($adev[4]) ? null : $adev[4];
       <div class="modal-body">
         <div class="row">
             <div class="col-md-6">
-                <form method="post" id="fleet_set">
-                    <input type="hidden" name="id" id="id_fleet" value="">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Hauler</label>
-                        <select class="form-control" name="hauler">
-                            <?php
-                            $sql = mysqli_query($db->connection, "SELECT * FROM `tbhauler`");
-                            while ($data = mysqli_fetch_assoc($sql)) {
-                                echo '<option value="' . $data['cn_hauler'] . '">' . $data['cn_hauler'] . '</option>';
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <a href="#" id="saved" class="btn btn-primary"><i class="ti-plus"></i> Add Hauler</a>
-                </form>
+                <input type="hidden" name="id" id="id_fleet" value="">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Hauler</label>
+                    <input type="text" name="hauler" class="form-control" placeholder="Add Hauler" id="fleet_set" />
+                </div>
+                <a href="#" id="saved" class="btn btn-primary"><i class="ti-plus"></i> Add Hauler</a>
             </div>
             <div class="col-md-6">
                 <div class="header">
