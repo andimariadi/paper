@@ -1,20 +1,20 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.10.1deb1
--- http://www.phpmyadmin.net
+-- version 4.6.5.2
+-- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 29, 2018 at 04:35 PM
--- Server version: 5.5.29
--- PHP Version: 5.3.10-1ubuntu3.26
+-- Generation Time: Apr 29, 2018 at 03:15 PM
+-- Server version: 10.1.21-MariaDB
+-- PHP Version: 7.1.1
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `fleet_control`
@@ -26,8 +26,8 @@ SET time_zone = "+00:00";
 -- Table structure for table `dispatcher`
 --
 
-CREATE TABLE IF NOT EXISTS `dispatcher` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `dispatcher` (
+  `id` int(10) NOT NULL,
   `first_name` varchar(50) NOT NULL,
   `last_name` varchar(50) NOT NULL,
   `username` varchar(20) NOT NULL,
@@ -38,9 +38,8 @@ CREATE TABLE IF NOT EXISTS `dispatcher` (
   `zip_code` int(10) NOT NULL,
   `about_me` text NOT NULL,
   `picture` varchar(100) NOT NULL,
-  `password` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+  `password` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `dispatcher`
@@ -55,12 +54,11 @@ INSERT INTO `dispatcher` (`id`, `first_name`, `last_name`, `username`, `email`, 
 -- Table structure for table `dispatch_fleet`
 --
 
-CREATE TABLE IF NOT EXISTS `dispatch_fleet` (
-  `id` int(100) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `dispatch_fleet` (
+  `id` int(100) NOT NULL,
   `id_dispatch` int(10) NOT NULL,
-  `id_fleet` int(100) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
+  `id_fleet` int(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `dispatch_fleet`
@@ -80,7 +78,9 @@ INSERT INTO `dispatch_fleet` (`id`, `id_dispatch`, `id_fleet`) VALUES
 (11, 1, 16),
 (12, 1, 17),
 (13, 1, 18),
-(14, 1, 19);
+(14, 1, 19),
+(15, 1, 20),
+(16, 1, 21);
 
 -- --------------------------------------------------------
 
@@ -88,13 +88,12 @@ INSERT INTO `dispatch_fleet` (`id`, `id_dispatch`, `id_fleet`) VALUES
 -- Table structure for table `dump_spot`
 --
 
-CREATE TABLE IF NOT EXISTS `dump_spot` (
-  `id` int(100) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `dump_spot` (
+  `id` int(100) NOT NULL,
   `name` varchar(50) NOT NULL,
   `coal` float NOT NULL,
-  `ob` float NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  `ob` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -102,13 +101,12 @@ CREATE TABLE IF NOT EXISTS `dump_spot` (
 -- Table structure for table `enum`
 --
 
-CREATE TABLE IF NOT EXISTS `enum` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `enum` (
+  `id` int(10) NOT NULL,
   `name` varchar(100) NOT NULL,
   `type` varchar(50) NOT NULL,
-  `refid` int(10) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=44 ;
+  `refid` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `enum`
@@ -165,13 +163,12 @@ INSERT INTO `enum` (`id`, `name`, `type`, `refid`) VALUES
 -- Table structure for table `hauler_capacity`
 --
 
-CREATE TABLE IF NOT EXISTS `hauler_capacity` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `hauler_capacity` (
+  `id` int(10) NOT NULL,
   `type` varchar(25) NOT NULL,
   `coal` float NOT NULL,
-  `ob` float NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+  `ob` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `hauler_capacity`
@@ -194,14 +191,13 @@ INSERT INTO `hauler_capacity` (`id`, `type`, `coal`, `ob`) VALUES
 -- Table structure for table `loading_time`
 --
 
-CREATE TABLE IF NOT EXISTS `loading_time` (
-  `id` int(100) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `loading_time` (
+  `id` int(100) NOT NULL,
   `type_loader` varchar(50) NOT NULL,
   `type_hauler` varchar(50) NOT NULL,
   `ob` float NOT NULL,
-  `coal` float NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=122 ;
+  `coal` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `loading_time`
@@ -336,17 +332,14 @@ INSERT INTO `loading_time` (`id`, `type_loader`, `type_hauler`, `ob`, `coal`) VA
 -- Table structure for table `master_fleet`
 --
 
-CREATE TABLE IF NOT EXISTS `master_fleet` (
-  `id` int(100) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `master_fleet` (
+  `id` int(100) NOT NULL,
   `id_fleet` int(100) NOT NULL,
   `cn_hauler` varchar(10) NOT NULL,
   `time` time NOT NULL,
   `date` date NOT NULL,
-  `status` varchar(10) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `id_fleet` (`id_fleet`),
-  KEY `cn_hauler` (`cn_hauler`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=75 ;
+  `status` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `master_fleet`
@@ -399,7 +392,7 @@ INSERT INTO `master_fleet` (`id`, `id_fleet`, `cn_hauler`, `time`, `date`, `stat
 (46, 19, 'D5-022', '14:34:19', '2018-04-29', 'available'),
 (47, 19, 'D5-024', '14:34:23', '2018-04-29', 'available'),
 (48, 19, 'D5-025', '14:34:26', '2018-04-29', 'available'),
-(49, 19, 'D5-015', '14:34:27', '2018-04-29', 'available'),
+(49, 19, 'D5-005', '14:34:27', '2018-04-29', 'available'),
 (50, 19, 'D5-015', '15:30:00', '2018-04-29', 'delete'),
 (51, 0, '', '00:00:00', '0000-00-00', 'delete'),
 (52, 0, '', '00:00:00', '0000-00-00', 'delete'),
@@ -423,7 +416,14 @@ INSERT INTO `master_fleet` (`id`, `id_fleet`, `cn_hauler`, `time`, `date`, `stat
 (71, 19, 'D5-021', '16:06:15', '2018-04-29', 'delete'),
 (72, 19, 'D5-025', '16:07:21', '2018-04-29', 'delete'),
 (73, 19, 'D5-012', '16:10:19', '2018-04-29', 'available'),
-(74, 19, 'D5-015', '16:31:26', '2018-04-29', 'available');
+(74, 19, 'D5-005', '16:31:26', '2018-04-29', 'available'),
+(75, 20, 'D5-001', '19:40:37', '2018-04-29', 'available'),
+(76, 20, 'D5-002', '19:40:57', '2018-04-29', 'available'),
+(77, 20, 'D5-003', '19:41:00', '2018-04-29', 'available'),
+(78, 20, 'D5-005', '19:41:04', '2018-04-29', 'available'),
+(79, 20, 'D5-003', '22:11:11', '2018-04-29', 'delete'),
+(80, 20, 'D5-002', '20:53:35', '2018-04-29', 'available'),
+(81, 20, 'D5-004', '20:53:40', '2018-04-29', 'available');
 
 -- --------------------------------------------------------
 
@@ -431,8 +431,8 @@ INSERT INTO `master_fleet` (`id`, `id_fleet`, `cn_hauler`, `time`, `date`, `stat
 -- Table structure for table `set_fleet`
 --
 
-CREATE TABLE IF NOT EXISTS `set_fleet` (
-  `id` int(20) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `set_fleet` (
+  `id` int(20) NOT NULL,
   `date` date NOT NULL,
   `time` time NOT NULL,
   `shift` int(11) NOT NULL,
@@ -450,13 +450,8 @@ CREATE TABLE IF NOT EXISTS `set_fleet` (
   `gl_front` varchar(100) NOT NULL,
   `gl_disp` varchar(100) NOT NULL,
   `distance` int(10) NOT NULL,
-  `refid` int(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `cn_hauler` (`cn_loader`,`status`,`jalur`),
-  KEY `status` (`status`),
-  KEY `jalur` (`jalur`),
-  KEY `pit` (`pit`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=20 ;
+  `refid` int(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `set_fleet`
@@ -467,7 +462,9 @@ INSERT INTO `set_fleet` (`id`, `date`, `time`, `shift`, `cn_loader`, `speed`, `s
 (2, '2018-04-27', '09:05:38', 2, 'X5-036', 21.9, 1, 5, 21, 37, 8, 'OB_1', '', '', 'OB_1', 'OB_1', 'OB_1', 9808, 0),
 (3, '2018-04-28', '08:58:21', 1, 'X7-006', 20, 1, 6, 19, 33, 8, 'W2_RL+48', '', '', 'MBAH LURAH', 'ALI', 'ADNAN', 1726, 0),
 (8, '2018-04-28', '10:39:32', 1, 'X7-012', 20, 1, 5, 20, 37, 8, '', '', '', '', '', '', 1897, 0),
-(19, '2018-04-29', '14:33:14', 1, 'X7-003', 21.82, 1, 6, 14, 32, 8, 'DN1OB_RL+075', '', '', 'SURYA', 'FERDYANSYAH', 'NGASRAN', 6384, 0);
+(19, '2018-04-29', '14:33:14', 1, 'X7-003', 21.82, 1, 6, 14, 32, 8, 'DN1OB_RL+075', '', '', 'SURYA', 'FERDYANSYAH', 'NGASRAN', 6384, 0),
+(20, '2018-04-29', '19:39:16', 2, 'X7-012', 20.82, 1, 6, 14, 32, 8, 'N1+N2 DISP', '', '', 'SURYA', 'N', 'A', 5887, 0),
+(21, '2018-04-29', '21:14:48', 2, 'X7-012', 20.1, 1, 5, 20, 37, 8, 'U', '', '', 'U', 'U', 'U', 7868, 0);
 
 -- --------------------------------------------------------
 
@@ -475,12 +472,10 @@ INSERT INTO `set_fleet` (`id`, `date`, `time`, `shift`, `cn_loader`, `speed`, `s
 -- Table structure for table `tbhauler`
 --
 
-CREATE TABLE IF NOT EXISTS `tbhauler` (
+CREATE TABLE `tbhauler` (
   `cn_hauler` varchar(10) NOT NULL,
   `type` varchar(100) NOT NULL,
-  `fix_fleet` varchar(10) NOT NULL,
-  PRIMARY KEY (`cn_hauler`),
-  KEY `fix_fleet` (`fix_fleet`)
+  `fix_fleet` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -806,15 +801,14 @@ INSERT INTO `tbhauler` (`cn_hauler`, `type`, `fix_fleet`) VALUES
 -- Table structure for table `tbloader`
 --
 
-CREATE TABLE IF NOT EXISTS `tbloader` (
+CREATE TABLE `tbloader` (
   `cn_jigsaw` varchar(10) NOT NULL,
   `type` varchar(100) NOT NULL,
   `old_eqp` varchar(100) NOT NULL,
   `model` varchar(10) NOT NULL,
   `ellipse_eqp` varchar(100) NOT NULL,
   `ob` int(10) NOT NULL,
-  `coal` int(10) NOT NULL,
-  PRIMARY KEY (`cn_jigsaw`)
+  `coal` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -936,13 +930,12 @@ INSERT INTO `tbloader` (`cn_jigsaw`, `type`, `old_eqp`, `model`, `ellipse_eqp`, 
 -- Table structure for table `travel_speed`
 --
 
-CREATE TABLE IF NOT EXISTS `travel_speed` (
-  `id` int(100) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `travel_speed` (
+  `id` int(100) NOT NULL,
   `id_jalur` int(10) NOT NULL,
   `coal` float NOT NULL,
-  `ob` float NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
+  `ob` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `travel_speed`
@@ -968,6 +961,132 @@ INSERT INTO `travel_speed` (`id`, `id_jalur`, `coal`, `ob`) VALUES
 (17, 30, 18, 20.2882),
 (18, 31, 18, 19.8246);
 
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `dispatcher`
+--
+ALTER TABLE `dispatcher`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `dispatch_fleet`
+--
+ALTER TABLE `dispatch_fleet`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `dump_spot`
+--
+ALTER TABLE `dump_spot`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `enum`
+--
+ALTER TABLE `enum`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `hauler_capacity`
+--
+ALTER TABLE `hauler_capacity`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `loading_time`
+--
+ALTER TABLE `loading_time`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `master_fleet`
+--
+ALTER TABLE `master_fleet`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_fleet` (`id_fleet`),
+  ADD KEY `cn_hauler` (`cn_hauler`);
+
+--
+-- Indexes for table `set_fleet`
+--
+ALTER TABLE `set_fleet`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cn_hauler` (`cn_loader`,`status`,`jalur`),
+  ADD KEY `status` (`status`),
+  ADD KEY `jalur` (`jalur`),
+  ADD KEY `pit` (`pit`);
+
+--
+-- Indexes for table `tbhauler`
+--
+ALTER TABLE `tbhauler`
+  ADD PRIMARY KEY (`cn_hauler`),
+  ADD KEY `fix_fleet` (`fix_fleet`);
+
+--
+-- Indexes for table `tbloader`
+--
+ALTER TABLE `tbloader`
+  ADD PRIMARY KEY (`cn_jigsaw`);
+
+--
+-- Indexes for table `travel_speed`
+--
+ALTER TABLE `travel_speed`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `dispatcher`
+--
+ALTER TABLE `dispatcher`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `dispatch_fleet`
+--
+ALTER TABLE `dispatch_fleet`
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+--
+-- AUTO_INCREMENT for table `dump_spot`
+--
+ALTER TABLE `dump_spot`
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `enum`
+--
+ALTER TABLE `enum`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+--
+-- AUTO_INCREMENT for table `hauler_capacity`
+--
+ALTER TABLE `hauler_capacity`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+--
+-- AUTO_INCREMENT for table `loading_time`
+--
+ALTER TABLE `loading_time`
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+--
+-- AUTO_INCREMENT for table `master_fleet`
+--
+ALTER TABLE `master_fleet`
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+--
+-- AUTO_INCREMENT for table `set_fleet`
+--
+ALTER TABLE `set_fleet`
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+--
+-- AUTO_INCREMENT for table `travel_speed`
+--
+ALTER TABLE `travel_speed`
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
