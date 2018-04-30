@@ -111,9 +111,6 @@ if (empty($_SESSION)) {
         case "hauler&{$pit}":
             include "page/list_hauler.php";
         break;
-        case "hauler&{$pit}&{$ds}":
-            include "page/list_hauler.php";
-        break;
         case "fleet_all":
             include "page/detail_all.php";
         break;
@@ -200,47 +197,6 @@ if (empty($_SESSION)) {
     </div>
   </div>
 </div>
-
-<div class="" tabindex="-1" role="dialog" style="
-    display:  none;
-    position: fixed;
-    right: 50px;
-    bottom: 0;
-    z-index: 1050;
-    overflow: hidden;
-    -webkit-overflow-scrolling: touch;
-    outline: 0;
-" id="modal_message">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Messager</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close_message">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <div class="modal-body" id="shoutbox" style="max-height: 300px; overflow-y: auto;">
-        
-      </div>
-      <div class="modal-footer">
-        <input type="text" id="message_shoutbox" class="form-control" style="border: 1px solid #999;">
-        <button type="button" class="btn btn-primary" id="post_shoutbox">Send Message</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div style="
-    position:  fixed;
-    bottom: 20px;
-    right: 50px;
-    z-index:  1000;
-    background-color: #fff;
-    border-radius:  100%;
-    padding: 10px 15px;
-    font-size:  24px;
-    border: 2px solid #fcb
-" id="icon_message"><span class="ti-email"></span></div>
 
 </body>
 </html>

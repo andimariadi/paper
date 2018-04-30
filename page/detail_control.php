@@ -46,9 +46,15 @@ if (strtoupper($data['material']) == strtoupper('coal')) {
 }
 $load = number_format($load, 3);
 
+if (strtoupper($data['material']) == strtoupper('coal')) {
+    $travel_plan = $data['speed_coal'];
+} else {
+    $travel_plan = $data['speed_ob'];
+}
+
 $cc_distance = number_format(($data['distance']*2)/1000, 2);
 $cc_distance = empty($cc_distance)? 0 : $cc_distance;
-$cc_travel = number_format((($data['distance']*2)/1000)/$data['speed'], 2);
+$cc_travel = number_format((($data['distance']*2)/1000)/$travel_plan, 2);
 $cc_loading = number_format((2+$load)/60, 2);
 $cc_loading = empty($cc_loading) ? 0 : $cc_loading;
 $cycle_speed = number_format($cc_distance/($cc_travel+$cc_loading), 2);
@@ -60,13 +66,20 @@ $sum_coal = array_sum($sumcoal);
 $sum_ob = array_sum($sumob);
 
 //Prodty. Fleet
-$cc_sd = number_format($cycle_speed/$cc_distance, 2);
+//Prodty. Fleet
+if ($cc_distance > 0) {
+    $cc_sd = number_format($cycle_speed/$cc_distance, 2);
+} else {
+    $cc_sd = 0;
+}
 $cc_sd = empty($cc_sd) ? 0 : $cc_sd;
 if (strtoupper($data['material']) == strtoupper('coal')) {
     $sum_sum = number_format($sum_coal, 2);
 } else {
     $sum_sum = number_format($sum_ob, 2);
 }
+$sum_sum = str_replace(',', '', $sum_sum);
+
 //cap
 if (strtoupper($data['material']) == strtoupper('coal')) {
     $prodty_fleet_cap = $data['coal'];
@@ -193,17 +206,11 @@ $matching_factor = number_format($prodty_fleet_act/$prodty_fleet_cap, 2);
                                 <tr>
                                     <td rowspan="3">Travel Speed(km/hour)</td>
                                     <td>Act.</td>
-                                    <th><?php echo $data['speed'];?></th>
+                                    <th><?php echo $travel_plan;?></th>
                                 </tr>
                                 <tr>
                                     <td>Plan</td>
-                                    <th><?php
-                                    if (strtoupper($data['material']) == strtoupper('coal')) {
-                                        echo $data['speed_coal'];
-                                    } else {
-                                        echo $data['speed_ob'];
-                                    }
-                                    ?></th>
+                                    <th><?php echo $travel_plan;?></th>
                                 </tr>
                                 <tr>
                                     <td>Dev.</td>
@@ -294,7 +301,7 @@ $matching_factor = number_format($prodty_fleet_act/$prodty_fleet_cap, 2);
                                 $next_date = $i > 23 ? date('Y-m-d', strtotime($data['date'] . '+1 days')) : $date;
                                 echo '<div class="col-xs-1" style="padding: 0;border-left: 1px solid #CCC5B9;border-bottom: 1px solid #CCC5B9;border-right: 1px solid #CCC5B9;"><table class="table" style="margin-bottom: 0;"><tr><th>' . $num . ':00</th></tr>';
 //
-                                $sa = "SELECT `id`,cast(concat(`date`, ' ', `time`) as datetime) as dt,`cn_hauler`, (SELECT a.status FROM master_fleet a WHERE a.id_fleet = master_fleet.id_fleet AND a.cn_hauler = master_fleet.cn_hauler AND cast(concat(a.date, ' ', a.time) as datetime) BETWEEN '" . $date . " {$time_start}' AND '" . $next_date . " {$num}:59:59' ORDER BY a.id DESC LIMIT 1) as `status` FROM `master_fleet` WHERE `id_fleet`='{$id}'  AND cast(concat(`date`, ' ', `time`) as datetime) BETWEEN '" . $date . " {$time_start}' AND '" . $next_date . " {$num}:59:59' GROUP BY `cn_hauler` DESC ORDER BY `id` ASC";
+                                $sa = "SELECT `id`,cast(concat(`date`, ' ', `time`) as datetime) as dt,`master_fleet`.`cn_hauler`, `tbhauler`.`fix_fleet`, (SELECT a.status FROM master_fleet a WHERE a.id_fleet = master_fleet.id_fleet AND a.cn_hauler = master_fleet.cn_hauler AND cast(concat(a.date, ' ', a.time) as datetime) BETWEEN '2018-04-30 06:00' AND '2018-04-30 09:59:59' ORDER BY a.id DESC LIMIT 1) as `status` FROM `master_fleet` LEFT JOIN `tbhauler` ON `master_fleet`.`cn_hauler` = `tbhauler`.`cn_hauler` WHERE `id_fleet`='{$id}'  AND cast(concat(`date`, ' ', `time`) as datetime) BETWEEN '" . $date . " {$time_start}' AND '" . $next_date . " {$num}:59:59' GROUP BY `cn_hauler` DESC ORDER BY `id` ASC";
                                 $xx = mysqli_query($db->connection, $sa);
                                 if (mysqli_num_rows($xx) > 0) {
                                     $s = "";
@@ -322,7 +329,11 @@ $matching_factor = number_format($prodty_fleet_act/$prodty_fleet_cap, 2);
                                 $sqls = mysqli_query($db->connection, $sa);
                                 while ($data = mysqli_fetch_assoc($sqls)) {
                                     if ($data['status'] == 'available') {
-                                        echo '<tr><td>' . $data['cn_hauler'] . '</td></tr>';
+                                        if ($data['fix_fleet'] == $loader) {
+                                            echo '<tr bgcolor="#fcb"><td align="center">' . $data['cn_hauler'] . '</td></tr>';
+                                        } else {
+                                            echo '<tr><td align="center">' . $data['cn_hauler'] . '</td></tr>';
+                                        }
                                     }
                                 }
                                 echo '</table></div>';

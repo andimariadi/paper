@@ -87,7 +87,7 @@ $notif = "";
 
                                                   <?php if($paging_info['curr_page'] >= $max) : ?>
                                                       <li class="page-item"><a href='?hauler&1' title='Page 1' class="page-link">1</a></li>
-                                                      <li class="page-item">..</li>
+                                                      <li class="page-item"><a href='#' title='..' class="page-link">..</a></li>
                                                   <?php endif; ?>
                                                   <?php for($i = $sp; $i <= ($sp + $max -1);$i++) : ?>
                                                       <?php
@@ -101,7 +101,7 @@ $notif = "";
                                                       <?php endif; ?>
                                                   <?php endfor; ?>
                                                   <?php if($paging_info['curr_page'] < ($paging_info['pages'] - floor($max / 2))) : ?>
-                                                      <li class="page-item">..</li>
+                                                      <li class="page-item"><a href='#' title='..' class="page-link">..</a></li>
                                                       <li class="page-item"><a href='?hauler&<?php echo $paging_info['pages'];?>' title='Page <?php echo $paging_info['pages']; ?>' class="page-link"><?php echo $paging_info['pages']; ?></a></li>
                                                   <?php endif; ?>
                                                   <?php if($paging_info['curr_page'] < $paging_info['pages']) : ?>

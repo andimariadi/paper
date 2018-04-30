@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
--- https://www.phpmyadmin.net/
+-- version 4.2.7.1
+-- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Apr 29, 2018 at 03:15 PM
--- Server version: 10.1.21-MariaDB
--- PHP Version: 7.1.1
+-- Host: 127.0.0.1
+-- Generation Time: Apr 30, 2018 at 05:42 AM
+-- Server version: 5.5.39
+-- PHP Version: 5.4.31
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `fleet_control`
@@ -26,8 +26,8 @@ SET time_zone = "+00:00";
 -- Table structure for table `dispatcher`
 --
 
-CREATE TABLE `dispatcher` (
-  `id` int(10) NOT NULL,
+CREATE TABLE IF NOT EXISTS `dispatcher` (
+`id` int(10) NOT NULL,
   `first_name` varchar(50) NOT NULL,
   `last_name` varchar(50) NOT NULL,
   `username` varchar(20) NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE `dispatcher` (
   `about_me` text NOT NULL,
   `picture` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `dispatcher`
@@ -54,11 +54,11 @@ INSERT INTO `dispatcher` (`id`, `first_name`, `last_name`, `username`, `email`, 
 -- Table structure for table `dispatch_fleet`
 --
 
-CREATE TABLE `dispatch_fleet` (
-  `id` int(100) NOT NULL,
+CREATE TABLE IF NOT EXISTS `dispatch_fleet` (
+`id` int(100) NOT NULL,
   `id_dispatch` int(10) NOT NULL,
   `id_fleet` int(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `dispatch_fleet`
@@ -73,14 +73,8 @@ INSERT INTO `dispatch_fleet` (`id`, `id_dispatch`, `id_fleet`) VALUES
 (6, 1, 11),
 (7, 1, 12),
 (8, 1, 13),
-(9, 1, 14),
-(10, 1, 15),
-(11, 1, 16),
-(12, 1, 17),
-(13, 1, 18),
-(14, 1, 19),
-(15, 1, 20),
-(16, 1, 21);
+(9, 1, 1),
+(10, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -88,12 +82,12 @@ INSERT INTO `dispatch_fleet` (`id`, `id_dispatch`, `id_fleet`) VALUES
 -- Table structure for table `dump_spot`
 --
 
-CREATE TABLE `dump_spot` (
-  `id` int(100) NOT NULL,
+CREATE TABLE IF NOT EXISTS `dump_spot` (
+`id` int(100) NOT NULL,
   `name` varchar(50) NOT NULL,
   `coal` float NOT NULL,
   `ob` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -101,12 +95,12 @@ CREATE TABLE `dump_spot` (
 -- Table structure for table `enum`
 --
 
-CREATE TABLE `enum` (
-  `id` int(10) NOT NULL,
+CREATE TABLE IF NOT EXISTS `enum` (
+`id` int(10) NOT NULL,
   `name` varchar(100) NOT NULL,
   `type` varchar(50) NOT NULL,
   `refid` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=53 ;
 
 --
 -- Dumping data for table `enum`
@@ -155,7 +149,16 @@ INSERT INTO `enum` (`id`, `name`, `type`, `refid`) VALUES
 (40, 'CT SPARE', 'area', 5),
 (41, 'STB CT', 'area', 5),
 (42, 'WARA', 'area', 7),
-(43, 'STB WR', 'area', 7);
+(43, 'STB WR', 'area', 7),
+(44, 'CAT777', 'type_hauler', 0),
+(45, 'CAT785', 'type_hauler', 0),
+(46, 'CAT789', 'type_hauler', 0),
+(47, 'EH1700', 'type_hauler', 0),
+(48, 'EH3500', 'type_hauler', 0),
+(49, 'HD1500', 'type_hauler', 0),
+(50, 'HD785', 'type_hauler', 0),
+(51, 'HD785_DUCKTAIL', 'type_hauler', 0),
+(52, 'HD785_JUMBO', 'type_hauler', 0);
 
 -- --------------------------------------------------------
 
@@ -163,12 +166,12 @@ INSERT INTO `enum` (`id`, `name`, `type`, `refid`) VALUES
 -- Table structure for table `hauler_capacity`
 --
 
-CREATE TABLE `hauler_capacity` (
-  `id` int(10) NOT NULL,
+CREATE TABLE IF NOT EXISTS `hauler_capacity` (
+`id` int(10) NOT NULL,
   `type` varchar(25) NOT NULL,
   `coal` float NOT NULL,
   `ob` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 --
 -- Dumping data for table `hauler_capacity`
@@ -191,13 +194,13 @@ INSERT INTO `hauler_capacity` (`id`, `type`, `coal`, `ob`) VALUES
 -- Table structure for table `loading_time`
 --
 
-CREATE TABLE `loading_time` (
-  `id` int(100) NOT NULL,
+CREATE TABLE IF NOT EXISTS `loading_time` (
+`id` int(100) NOT NULL,
   `type_loader` varchar(50) NOT NULL,
   `type_hauler` varchar(50) NOT NULL,
   `ob` float NOT NULL,
   `coal` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=122 ;
 
 --
 -- Dumping data for table `loading_time`
@@ -332,98 +335,21 @@ INSERT INTO `loading_time` (`id`, `type_loader`, `type_hauler`, `ob`, `coal`) VA
 -- Table structure for table `master_fleet`
 --
 
-CREATE TABLE `master_fleet` (
-  `id` int(100) NOT NULL,
+CREATE TABLE IF NOT EXISTS `master_fleet` (
+`id` int(100) NOT NULL,
   `id_fleet` int(100) NOT NULL,
   `cn_hauler` varchar(10) NOT NULL,
   `time` time NOT NULL,
   `date` date NOT NULL,
   `status` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `master_fleet`
 --
 
 INSERT INTO `master_fleet` (`id`, `id_fleet`, `cn_hauler`, `time`, `date`, `status`) VALUES
-(1, 1, 'D4-001', '13:19:54', '2018-04-26', 'available'),
-(2, 1, 'D4-002', '13:19:59', '2018-04-26', 'available'),
-(3, 1, 'D4-003', '13:20:02', '2018-04-26', 'available'),
-(4, 1, 'D4-004', '13:20:07', '2018-04-26', 'available'),
-(5, 1, 'D4-006', '13:20:12', '2018-04-26', 'available'),
-(6, 1, 'D4-008', '13:20:19', '2018-04-26', 'available'),
-(7, 1, 'D4-009', '13:20:25', '2018-04-26', 'available'),
-(8, 1, 'D4-013', '13:20:37', '2018-04-26', 'available'),
-(10, 1, 'D4-019', '14:59:31', '2018-04-26', 'available'),
-(11, 1, 'D4-029', '14:59:43', '2018-04-26', 'available'),
-(12, 1, 'D4-034', '14:59:50', '2018-04-26', 'available'),
-(13, 1, 'D4-043', '14:59:55', '2018-04-26', 'available'),
-(14, 1, 'D4-044', '15:00:00', '2018-04-26', 'available'),
-(15, 1, 'D4-046', '15:00:04', '2018-04-26', 'available'),
-(16, 1, 'D4-086', '15:00:11', '2018-04-26', 'available'),
-(17, 1, 'D4-087', '15:00:15', '2018-04-26', 'available'),
-(18, 1, 'D4-100', '15:00:21', '2018-04-26', 'available'),
-(19, 1, 'D4-102', '15:00:25', '2018-04-26', 'available'),
-(21, 1, 'D4-102', '16:00:25', '2018-04-26', 'delete'),
-(22, 2, 'D3-006', '18:19:17', '2018-04-27', 'available'),
-(23, 2, 'D3-007', '01:19:19', '2018-04-28', 'available'),
-(24, 2, 'D3-012', '02:19:21', '2018-04-28', 'available'),
-(25, 3, 'D5-003', '08:59:38', '2018-04-28', 'available'),
-(26, 3, 'D5-004', '08:59:44', '2018-04-28', 'available'),
-(27, 3, 'D5-005', '08:59:45', '2018-04-28', 'available'),
-(28, 3, 'D5-038', '08:59:57', '2018-04-28', 'available'),
-(29, 8, 'D3-006', '11:50:52', '2018-04-28', 'delete'),
-(30, 8, 'D3-063', '14:12:34', '2018-04-28', 'delete'),
-(31, 9, 'D3-006', '12:12:19', '2018-04-29', 'available'),
-(32, 9, 'D3-006', '12:12:20', '2018-04-29', 'available'),
-(33, 9, 'D3-012', '12:12:21', '2018-04-29', 'available'),
-(34, 9, 'D3-015', '12:12:22', '2018-04-29', 'available'),
-(35, 9, 'D3-047', '12:12:24', '2018-04-29', 'available'),
-(36, 10, 'D3-013', '14:30:23', '2018-04-29', 'available'),
-(37, 10, 'D3-049', '14:30:25', '2018-04-29', 'available'),
-(38, 10, 'D3-064', '14:30:27', '2018-04-29', 'available'),
-(39, 19, 'D5-011', '14:33:24', '2018-04-29', 'available'),
-(40, 19, 'D5-013', '14:33:35', '2018-04-29', 'available'),
-(41, 19, 'D5-016', '14:33:57', '2018-04-29', 'available'),
-(42, 19, 'D5-017', '14:34:02', '2018-04-29', 'available'),
-(43, 19, 'D5-018', '14:34:06', '2018-04-29', 'available'),
-(44, 19, 'D5-019', '14:34:10', '2018-04-29', 'available'),
-(45, 19, 'D5-021', '14:34:16', '2018-04-29', 'available'),
-(46, 19, 'D5-022', '14:34:19', '2018-04-29', 'available'),
-(47, 19, 'D5-024', '14:34:23', '2018-04-29', 'available'),
-(48, 19, 'D5-025', '14:34:26', '2018-04-29', 'available'),
-(49, 19, 'D5-005', '14:34:27', '2018-04-29', 'available'),
-(50, 19, 'D5-015', '15:30:00', '2018-04-29', 'delete'),
-(51, 0, '', '00:00:00', '0000-00-00', 'delete'),
-(52, 0, '', '00:00:00', '0000-00-00', 'delete'),
-(53, 48, '', '00:00:00', '0000-00-00', 'delete'),
-(54, 48, '', '00:00:00', '0000-00-00', 'delete'),
-(55, 48, '', '00:00:00', '0000-00-00', 'delete'),
-(56, 48, '', '00:00:00', '0000-00-00', 'delete'),
-(58, 19, 'D5-024', '16:04:08', '2018-04-29', 'delete'),
-(59, 19, 'D5-022', '16:04:54', '2018-04-29', 'delete'),
-(60, 19, 'D5-011', '16:06:10', '2018-04-29', 'delete'),
-(61, 19, 'D5-013', '16:06:11', '2018-04-29', 'delete'),
-(62, 19, 'D5-016', '16:06:11', '2018-04-29', 'delete'),
-(63, 19, 'D5-017', '16:06:11', '2018-04-29', 'delete'),
-(64, 19, 'D5-018', '16:06:11', '2018-04-29', 'delete'),
-(65, 19, 'D5-019', '16:06:11', '2018-04-29', 'delete'),
-(66, 19, 'D5-021', '16:06:12', '2018-04-29', 'delete'),
-(67, 19, 'D5-021', '16:06:13', '2018-04-29', 'delete'),
-(68, 19, 'D5-021', '16:06:14', '2018-04-29', 'delete'),
-(69, 19, 'D5-021', '16:06:14', '2018-04-29', 'delete'),
-(70, 19, 'D5-021', '16:06:15', '2018-04-29', 'delete'),
-(71, 19, 'D5-021', '16:06:15', '2018-04-29', 'delete'),
-(72, 19, 'D5-025', '16:07:21', '2018-04-29', 'delete'),
-(73, 19, 'D5-012', '16:10:19', '2018-04-29', 'available'),
-(74, 19, 'D5-005', '16:31:26', '2018-04-29', 'available'),
-(75, 20, 'D5-001', '19:40:37', '2018-04-29', 'available'),
-(76, 20, 'D5-002', '19:40:57', '2018-04-29', 'available'),
-(77, 20, 'D5-003', '19:41:00', '2018-04-29', 'available'),
-(78, 20, 'D5-005', '19:41:04', '2018-04-29', 'available'),
-(79, 20, 'D5-003', '22:11:11', '2018-04-29', 'delete'),
-(80, 20, 'D5-002', '20:53:35', '2018-04-29', 'available'),
-(81, 20, 'D5-004', '20:53:40', '2018-04-29', 'available');
+(1, 2, 'D5-002', '10:39:16', '2018-04-30', 'available');
 
 -- --------------------------------------------------------
 
@@ -431,8 +357,8 @@ INSERT INTO `master_fleet` (`id`, `id_fleet`, `cn_hauler`, `time`, `date`, `stat
 -- Table structure for table `set_fleet`
 --
 
-CREATE TABLE `set_fleet` (
-  `id` int(20) NOT NULL,
+CREATE TABLE IF NOT EXISTS `set_fleet` (
+`id` int(20) NOT NULL,
   `date` date NOT NULL,
   `time` time NOT NULL,
   `shift` int(11) NOT NULL,
@@ -451,20 +377,35 @@ CREATE TABLE `set_fleet` (
   `gl_disp` varchar(100) NOT NULL,
   `distance` int(10) NOT NULL,
   `refid` int(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `set_fleet`
 --
 
 INSERT INTO `set_fleet` (`id`, `date`, `time`, `shift`, `cn_loader`, `speed`, `status`, `pit`, `jalur`, `area`, `material`, `disposal`, `coal_seam`, `coal_series`, `spv`, `gl_front`, `gl_disp`, `distance`, `refid`) VALUES
-(1, '2018-04-26', '11:00:22', 1, 'X7-004', 21.2, 1, 5, 21, 37, 8, 'C2OB_RL+108', '', '', 'HERMANTO', 'HERMANTO', 'ENGGAL', 6450, 0),
-(2, '2018-04-27', '09:05:38', 2, 'X5-036', 21.9, 1, 5, 21, 37, 8, 'OB_1', '', '', 'OB_1', 'OB_1', 'OB_1', 9808, 0),
-(3, '2018-04-28', '08:58:21', 1, 'X7-006', 20, 1, 6, 19, 33, 8, 'W2_RL+48', '', '', 'MBAH LURAH', 'ALI', 'ADNAN', 1726, 0),
-(8, '2018-04-28', '10:39:32', 1, 'X7-012', 20, 1, 5, 20, 37, 8, '', '', '', '', '', '', 1897, 0),
-(19, '2018-04-29', '14:33:14', 1, 'X7-003', 21.82, 1, 6, 14, 32, 8, 'DN1OB_RL+075', '', '', 'SURYA', 'FERDYANSYAH', 'NGASRAN', 6384, 0),
-(20, '2018-04-29', '19:39:16', 2, 'X7-012', 20.82, 1, 6, 14, 32, 8, 'N1+N2 DISP', '', '', 'SURYA', 'N', 'A', 5887, 0),
-(21, '2018-04-29', '21:14:48', 2, 'X7-012', 20.1, 1, 5, 20, 37, 8, 'U', '', '', 'U', 'U', 'U', 7868, 0);
+(2, '2018-04-30', '10:02:55', 1, 'X7-012', 0, 1, 5, 20, 37, 8, '', '', '', '', '', '', 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `shoutbox`
+--
+
+CREATE TABLE IF NOT EXISTS `shoutbox` (
+`id` int(10) NOT NULL,
+  `message` text NOT NULL,
+  `date` date NOT NULL,
+  `time` time NOT NULL,
+  `username` varchar(100) NOT NULL
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `shoutbox`
+--
+
+INSERT INTO `shoutbox` (`id`, `message`, `date`, `time`, `username`) VALUES
+(1, 'ye', '2018-04-30', '11:31:41', 'andimariadi');
 
 -- --------------------------------------------------------
 
@@ -472,7 +413,7 @@ INSERT INTO `set_fleet` (`id`, `date`, `time`, `shift`, `cn_loader`, `speed`, `s
 -- Table structure for table `tbhauler`
 --
 
-CREATE TABLE `tbhauler` (
+CREATE TABLE IF NOT EXISTS `tbhauler` (
   `cn_hauler` varchar(10) NOT NULL,
   `type` varchar(100) NOT NULL,
   `fix_fleet` varchar(10) NOT NULL
@@ -483,317 +424,318 @@ CREATE TABLE `tbhauler` (
 --
 
 INSERT INTO `tbhauler` (`cn_hauler`, `type`, `fix_fleet`) VALUES
-('D3-006', 'EH1700', 'X2-028'),
-('D3-007', 'EH1700', 'X2-028'),
-('D3-012', 'EH1700', 'X2-028'),
-('D3-013', 'EH1700', ''),
-('D3-014', 'EH1700', ''),
-('D3-015', 'EH1700', 'X2-028'),
-('D3-045', 'HD785_JUMBO', 'X4-003'),
-('D3-046', 'HD785_JUMBO', 'X4-003'),
-('D3-047', 'HD785_JUMBO', 'X4-003'),
-('D3-049', 'HD785_JUMBO', 'X4-021'),
-('D3-053', 'HD785_JUMBO', 'X4-021'),
-('D3-054', 'HD785_JUMBO', 'X4-014'),
-('D3-058', 'HD785', 'S6-003'),
-('D3-063', 'HD785_JUMBO', 'X2-050'),
-('D3-064', 'HD785_JUMBO', 'X4-021'),
-('D3-065', 'HD785', 'X4-007'),
-('D3-067', 'HD785', 'S6-003'),
-('D3-076', 'HD785', 'X2-053'),
-('D3-078', 'HD785', 'X2-053'),
-('D3-079', 'HD785', 'X2-053'),
-('D3-081', 'HD785_JUMBO', 'X4-001'),
-('D3-084', 'HD785_JUMBO', 'X4-001'),
-('D3-085', 'HD785_JUMBO', 'X4-024'),
-('D3-086', 'HD785_JUMBO', 'X4-024'),
-('D3-087', 'HD785_JUMBO', 'X4-022'),
-('D3-088', 'HD785_JUMBO', 'X4-001'),
-('D3-091', 'HD785_JUMBO', 'X4-011'),
-('D3-092', 'HD785_DUCKTAIL', 'S6-003'),
-('D3-093', 'HD785_DUCKTAIL', 'S6-003'),
-('D3-094', 'HD785_JUMBO', 'X4-011'),
-('D3-095', 'HD785_JUMBO', 'X4-011'),
-('D3-096', 'HD785_DUCKTAIL', 'S6-003'),
-('D3-097', 'HD785_JUMBO', 'X4-022'),
-('D3-098', 'HD785_DUCKTAIL', 'S6-003'),
-('D3-099', 'HD785_JUMBO', 'X2-050'),
-('D3-100', 'HD785_JUMBO', 'X4-012'),
-('D3-101', 'HD785_JUMBO', 'X4-012'),
-('D3-102', 'HD785_JUMBO', 'X4-012'),
-('D3-108', 'HD785_JUMBO', 'X4-018'),
-('D3-109', 'HD785_JUMBO', 'X4-018'),
-('D3-110', 'HD785_JUMBO', 'X2-048'),
-('D3-111', 'HD785', 'X4-006'),
-('D3-112', 'HD785_JUMBO', 'X4-018'),
-('D3-113', 'HD785_JUMBO', 'X2-048'),
-('D3-114', 'HD785', 'X5-012'),
-('D3-115', 'HD785', 'X4-006'),
-('D3-116', 'HD785', 'X4-006'),
-('D3-117', 'HD785', 'X4-006'),
-('D3-118', 'HD785', 'X4-006'),
-('D3-119', 'HD785', 'X4-006'),
-('D3-120', 'HD785_DUCKTAIL', ''),
-('D3-121', 'HD785', 'X4-006'),
-('D3-122', 'HD785', 'X4-006'),
-('D3-123', 'HD785', 'X4-006'),
-('D3-124', 'HD785', 'X4-006'),
-('D3-125', 'HD785', 'S6-003'),
-('D3-126', 'HD785', 'S6-003'),
-('D3-127', 'HD785', 'S6-003'),
-('D3-128', 'HD785', 'S6-003'),
-('D3-129', 'HD785', 'S6-003'),
-('D3-130', 'HD785', 'X2-043'),
-('D3-131', 'HD785', 'X2-043'),
-('D3-132', 'HD785_JUMBO', 'X4-002'),
-('D3-133', 'HD785_JUMBO', 'X4-002'),
-('D3-134', 'HD785', 'X5-009'),
-('D3-135', 'HD785', 'X5-009'),
-('D3-136', 'HD785', 'X5-009'),
-('D3-137', 'HD785', 'X4-007'),
-('D3-138', 'HD785', 'X5-009'),
-('D3-139', 'HD785', 'X2-043'),
-('D3-140', 'HD785_JUMBO', 'X2-050'),
-('D3-145', 'HD785', 'X4-005'),
-('D3-146', 'HD785', 'X4-007'),
-('D3-147', 'HD785', 'X4-015'),
-('D3-148', 'HD785', 'X5-012'),
-('D3-149', 'HD785', 'X4-015'),
-('D3-150', 'HD785', 'X4-015'),
-('D3-151', 'HD785', 'X4-015'),
-('D3-152', 'HD785', 'X4-015'),
-('D3-154', 'HD785', 'X4-015'),
-('D3-163', 'HD785', 'X4-006'),
-('D3-166', 'HD785', 'X5-009'),
-('D3-167', 'HD785', 'X4-006'),
-('D3-169', 'HD785_DUCKTAIL', 'S6-003'),
-('D3-170', 'HD785', 'X4-005'),
-('D3-177', 'HD785', 'X4-007'),
-('D3-178', 'HD785_JUMBO', 'X4-002'),
-('D3-179', 'HD785_JUMBO', 'X4-022'),
-('D3-180', 'HD785', 'X4-015'),
-('D3-181', 'HD785', 'X4-015'),
-('D3-182', 'HD785', 'X4-015'),
-('D3-183', 'HD785', 'X4-023'),
-('D3-186', 'HD785', 'X4-015'),
-('D3-214', 'HD785', 'X4-005'),
-('D3-215', 'HD785', 'X4-007'),
-('D3-219', 'HD785_JUMBO', 'X2-048'),
-('D3-221', 'CAT777', 'X4-010'),
-('D3-222', 'CAT777', 'X4-010'),
-('D3-223', 'CAT777', 'X4-010'),
-('D3-224', 'CAT777', 'X4-010'),
-('D3-225', 'CAT777', 'X4-010'),
-('D3-226', 'CAT777', 'X4-010'),
-('D3-227', 'CAT777', 'X4-010'),
-('D3-228', 'CAT777', 'X4-010'),
-('D3-229', 'CAT777', ''),
-('D3-230', 'CAT777', 'X4-010'),
-('D3-231', 'CAT777', 'X4-010'),
-('D3-232', 'CAT777', 'X4-010'),
-('D3-233', 'CAT777', 'X4-010'),
-('D3-234', 'CAT777', 'X4-014'),
-('D3-235', 'CAT777', 'X4-014'),
-('D3-241', 'HD785', 'X5-012'),
-('D3-242', 'HD785', 'X5-012'),
-('D3-243', 'HD785', 'X5-012'),
-('D3-244', 'HD785', 'X5-012'),
-('D3-245', 'HD785_JUMBO', 'X4-009'),
-('D3-246', 'HD785_JUMBO', 'X4-009'),
-('D3-247', 'HD785_JUMBO', 'X4-009'),
-('D3-248', 'HD785_JUMBO', 'X4-009'),
-('D3-249', 'HD785', 'X5-012'),
-('D3-250', 'HD785', 'X5-012'),
-('D3-254', 'HD785', 'X5-012'),
-('D3-256', 'HD785', 'X5-012'),
-('D3-257', 'HD785', 'X5-012'),
-('D3-258', 'HD785', 'X5-012'),
-('D3-259', 'CAT777', 'X2-052'),
-('D3-260', 'CAT777', 'X2-052'),
-('D3-262', 'CAT777', 'X2-052'),
-('D3-264', 'CAT777', 'X2-052'),
-('D3-266', 'CAT777', 'X2-060'),
-('D3-267', 'CAT777', ''),
-('D3-269', 'CAT777', 'X2-060'),
-('D3-271', 'CAT777', ''),
-('D3-272', 'CAT777', 'X2-057'),
-('D3-273', 'CAT777', 'X2-057'),
-('D3-274', 'CAT777', 'X2-057'),
-('D3-277', 'CAT777', 'X5-009'),
-('D3-279', 'CAT777', 'X5-009'),
-('D3-280', 'CAT777', 'X5-009'),
-('D3-281', 'CAT777', 'X5-009'),
-('D3-282', 'CAT777', 'X5-009'),
-('D3-285', 'CAT777', 'X5-009'),
-('D3-286', 'CAT777', 'X4-031'),
-('D3-287', 'CAT777', 'X4-031'),
-('D3-288', 'CAT777', 'X4-031'),
-('D3-289', 'CAT777', 'X4-031'),
-('D3-290', 'CAT777', 'X4-031'),
-('D3-291', 'CAT777', 'X4-031'),
-('D3-292', 'CAT777', 'X4-031'),
-('D3-293', 'CAT777', 'X4-031'),
-('D3-294', 'CAT777', 'X4-031'),
-('D3-295', 'CAT777', 'X2-059'),
-('D3-303', 'CAT777', 'X2-056'),
-('D3-304', 'CAT777', 'X2-056'),
-('D3-305', 'CAT777', 'X2-056'),
-('D3-307', 'CAT777', 'X2-056'),
-('D3-308', 'CAT777', 'X5-009'),
-('D3-310', 'CAT777', 'X4-024'),
-('D3-311', 'CAT777', 'X2-059'),
-('D3-319', 'HD785', 'X4-007'),
-('D3-355', 'CAT777', 'X4-023'),
-('D3-356', 'CAT777', 'X4-023'),
-('D3-357', 'CAT777', 'X4-023'),
-('D3-358', 'CAT777', 'X4-023'),
-('D3-359', 'CAT777', 'X4-023'),
-('D3-360', 'CAT777', 'X4-023'),
-('D3-362', 'CAT777', 'X4-023'),
-('D3-363', 'CAT777', 'X4-023'),
-('D3-364', 'CAT777', 'X4-023'),
-('D4-001', 'CAT785', 'S7-002'),
-('D4-002', 'CAT785', 'S7-002'),
-('D4-003', 'CAT785', 'S7-002'),
-('D4-004', 'CAT785', 'S7-002'),
-('D4-005', 'CAT785', 'S7-002'),
-('D4-006', 'CAT785', 'S7-002'),
-('D4-007', 'CAT785', 'S7-002'),
-('D4-008', 'CAT785', 'S7-002'),
-('D4-009', 'CAT785', 'S7-002'),
-('D4-010', 'CAT785', 'S7-002'),
-('D4-011', 'CAT785', 'S7-002'),
-('D4-012', 'CAT785', 'S7-002'),
-('D4-013', 'CAT785', 'X5-036'),
-('D4-014', 'CAT785', 'X5-036'),
-('D4-015', 'HD1500', 'S7-002'),
-('D4-016', 'HD1500', 'S7-002'),
-('D4-017', 'HD1500', 'S7-002'),
-('D4-018', 'HD1500', 'X4-014'),
-('D4-019', 'HD1500', 'X4-014'),
-('D4-020', 'HD1500', 'X4-014'),
-('D4-021', 'HD1500', 'X7-004'),
-('D4-022', 'HD1500', 'X7-004'),
-('D4-023', 'HD1500', 'X7-004'),
-('D4-024', 'HD1500', 'X7-004'),
-('D4-025', 'HD1500', 'X7-004'),
-('D4-026', 'HD1500', 'X7-004'),
-('D4-027', 'HD1500', 'X7-004'),
-('D4-028', 'HD1500', 'X7-004'),
-('D4-029', 'HD1500', 'X7-004'),
-('D4-030', 'HD1500', 'X7-004'),
-('D4-031', 'CAT785', 'X5-036'),
-('D4-032', 'CAT785', 'X5-036'),
-('D4-033', 'CAT785', 'X5-036'),
-('D4-034', 'CAT785', 'X5-036'),
-('D4-035', 'HD1500', 'X7-004'),
-('D4-036', 'HD1500', 'X7-004'),
-('D4-037', 'HD1500', 'X7-004'),
-('D4-038', 'HD1500', 'X5-008'),
-('D4-039', 'HD1500', 'X5-008'),
-('D4-040', 'HD1500', 'X5-008'),
-('D4-041', 'HD1500', 'X5-008'),
-('D4-042', 'HD1500', 'X5-008'),
-('D4-043', 'HD1500', 'X5-008'),
-('D4-044', 'HD1500', 'X5-008'),
-('D4-045', 'HD1500', 'X5-008'),
-('D4-046', 'HD1500', 'X5-008'),
-('D4-047', 'CAT785', 'X5-036'),
-('D4-048', 'CAT785', 'X5-036'),
-('D4-049', 'CAT785', 'X5-036'),
-('D4-050', 'CAT785', 'X7-002'),
-('D4-051', 'CAT785', 'X7-002'),
-('D4-052', 'CAT785', 'X7-002'),
-('D4-053', 'CAT785', 'X7-002'),
-('D4-054', 'CAT785', 'X7-002'),
-('D4-055', 'CAT785', 'X7-002'),
-('D4-056', 'CAT785', 'X7-002'),
-('D4-057', 'CAT785', 'X7-002'),
-('D4-058', 'CAT785', 'X7-002'),
-('D4-059', 'CAT785', 'X7-002'),
-('D4-060', 'CAT785', 'X7-002'),
-('D4-061', 'CAT785', ''),
-('D4-062', 'CAT785', 'X7-002'),
-('D4-063', 'CAT785', 'X7-002'),
-('D4-064', 'CAT785', 'X7-002'),
-('D4-065', 'CAT785', 'X7-002'),
-('D4-066', 'CAT785', ''),
-('D4-067', 'CAT785', 'X7-007'),
-('D4-068', 'CAT785', 'X7-007'),
-('D4-069', 'CAT785', 'X7-007'),
-('D4-070', 'CAT785', 'X7-007'),
-('D4-071', 'CAT785', 'X7-007'),
-('D4-072', 'CAT785', 'X7-007'),
-('D4-073', 'CAT785', ''),
-('D4-074', 'CAT785', 'X7-007'),
-('D4-075', 'CAT785', 'X7-007'),
-('D4-076', 'CAT785', 'X7-007'),
-('D4-077', 'CAT785', 'X7-007'),
-('D4-078', 'HD1500', 'X7-005'),
-('D4-079', 'HD1500', ''),
-('D4-080', 'HD1500', 'X7-005'),
-('D4-081', 'HD1500', 'X7-005'),
-('D4-082', 'HD1500', 'X7-005'),
-('D4-083', 'HD1500', 'X7-005'),
-('D4-084', 'HD1500', 'X7-005'),
-('D4-085', 'HD1500', 'X7-005'),
-('D4-086', 'HD1500', 'X7-005'),
-('D4-087', 'HD1500', 'X7-005'),
-('D4-088', 'HD1500', 'X7-005'),
-('D4-089', 'HD1500', 'X7-005'),
-('D4-090', 'HD1500', 'X7-005'),
-('D4-091', 'HD1500', 'X7-005'),
-('D4-092', 'HD1500', 'X7-005'),
-('D4-093', 'HD1500', 'X5-011'),
-('D4-094', 'HD1500', 'X5-011'),
-('D4-095', 'HD1500', 'X5-011'),
-('D4-096', 'HD1500', 'X5-011'),
-('D4-097', 'HD1500', ''),
-('D4-098', 'HD1500', 'X5-011'),
-('D4-099', 'HD1500', 'X5-011'),
-('D4-100', 'HD1500', 'X5-011'),
-('D4-101', 'HD1500', 'X5-011'),
-('D4-102', 'HD1500', 'X5-011'),
-('D4-103', 'HD1500', 'X5-011'),
-('D5-001', 'CAT789', 'X7-003'),
-('D5-002', 'CAT789', 'X7-003'),
-('D5-003', 'CAT789', 'X7-003'),
-('D5-004', 'CAT789', 'X7-003'),
-('D5-005', 'CAT789', 'X7-003'),
-('D5-006', 'CAT789', 'X7-003'),
-('D5-007', 'CAT789', 'X7-003'),
-('D5-008', 'CAT789', 'X7-003'),
-('D5-009', 'CAT789', 'X7-003'),
-('D5-010', 'CAT789', 'X7-003'),
-('D5-011', 'EH3500', 'X7-008'),
-('D5-012', 'EH3500', ''),
-('D5-013', 'EH3500', 'X7-008'),
-('D5-014', 'EH3500', 'X7-008'),
-('D5-015', 'EH3500', 'X7-008'),
-('D5-016', 'EH3500', 'X7-008'),
-('D5-017', 'EH3500', 'X7-008'),
-('D5-018', 'EH3500', 'X7-008'),
-('D5-019', 'EH3500', 'X7-008'),
-('D5-020', 'EH3500', 'X7-008'),
-('D5-021', 'EH3500', 'X7-008'),
-('D5-022', 'EH3500', 'X7-008'),
-('D5-023', 'EH3500', 'X7-008'),
-('D5-024', 'EH3500', 'X7-003'),
-('D5-025', 'EH3500', 'X7-003'),
-('D5-026', 'CAT789', 'X7-007'),
-('D5-027', 'CAT789', 'X7-007'),
-('D5-028', 'CAT789', 'X7-007'),
-('D5-029', 'CAT789', 'X7-007'),
-('D5-030', 'CAT789', 'X7-007'),
-('D5-031', 'CAT789', ''),
-('D5-032', 'CAT789', 'X7-006'),
-('D5-033', 'CAT789', 'X7-006'),
-('D5-034', 'CAT789', 'X7-006'),
-('D5-035', 'CAT789', ''),
-('D5-036', 'CAT789', 'X7-006'),
-('D5-037', 'CAT789', 'X7-006'),
-('D5-038', 'CAT789', 'X7-006'),
-('D5-039', 'CAT789', '');
+('D3-006', '47', 'X2-028'),
+('D3-007', '47', 'X2-028'),
+('D3-012', '47', 'X2-028'),
+('D3-013', '47', ''),
+('D3-014', '47', ''),
+('D3-015', '47', 'X2-028'),
+('D3-045', '52', 'X4-003'),
+('D3-046', '52', 'X4-003'),
+('D3-047', '52', 'X4-003'),
+('D3-049', '52', 'X4-021'),
+('D3-053', '52', 'X4-021'),
+('D3-054', '52', 'X4-014'),
+('D3-058', '50', 'S6-003'),
+('D3-063', '52', 'X2-050'),
+('D3-064', '52', 'X4-021'),
+('D3-065', '50', 'X4-007'),
+('D3-067', '50', 'S6-003'),
+('D3-076', '50', 'X2-053'),
+('D3-078', '50', 'X2-053'),
+('D3-079', '50', 'X2-053'),
+('D3-081', '52', 'X4-001'),
+('D3-084', '52', 'X4-001'),
+('D3-085', '52', 'X4-024'),
+('D3-086', '52', 'X4-024'),
+('D3-087', '52', 'X4-022'),
+('D3-088', '52', 'X4-001'),
+('D3-091', '52', 'X4-011'),
+('D3-092', '51', 'S6-003'),
+('D3-093', '51', 'S6-003'),
+('D3-094', '52', 'X4-011'),
+('D3-095', '52', 'X4-011'),
+('D3-096', '51', 'S6-003'),
+('D3-097', '52', 'X4-022'),
+('D3-098', '51', 'S6-003'),
+('D3-099', '52', 'X2-050'),
+('D3-100', '52', 'X4-012'),
+('D3-101', '52', 'X4-012'),
+('D3-102', '52', 'X4-012'),
+('D3-108', '52', 'X4-018'),
+('D3-109', '52', 'X4-018'),
+('D3-110', '52', 'X2-048'),
+('D3-111', '50', 'X4-006'),
+('D3-112', '52', 'X4-018'),
+('D3-113', '52', 'X2-048'),
+('D3-114', '50', 'X5-012'),
+('D3-115', '50', 'X4-006'),
+('D3-116', '50', 'X4-006'),
+('D3-117', '50', 'X4-006'),
+('D3-118', '50', 'X4-006'),
+('D3-119', '50', 'X4-006'),
+('D3-120', '51', ''),
+('D3-121', '50', 'X4-006'),
+('D3-122', '50', 'X4-006'),
+('D3-123', '50', 'X4-006'),
+('D3-124', '50', 'X4-006'),
+('D3-125', '50', 'S6-003'),
+('D3-126', '50', 'S6-003'),
+('D3-127', '50', 'S6-003'),
+('D3-128', '50', 'S6-003'),
+('D3-129', '50', 'S6-003'),
+('D3-130', '50', 'X2-043'),
+('D3-131', '50', 'X2-043'),
+('D3-132', '52', 'X4-002'),
+('D3-133', '52', 'X4-002'),
+('D3-134', '50', 'X5-009'),
+('D3-135', '50', 'X5-009'),
+('D3-136', '50', 'X5-009'),
+('D3-137', '50', 'X4-007'),
+('D3-138', '50', 'X5-009'),
+('D3-139', '50', 'X2-043'),
+('D3-140', '52', 'X2-050'),
+('D3-145', '50', 'X4-005'),
+('D3-146', '50', 'X4-007'),
+('D3-147', '50', 'X4-015'),
+('D3-148', '50', 'X5-012'),
+('D3-149', '50', 'X4-015'),
+('D3-150', '50', 'X4-015'),
+('D3-151', '50', 'X4-015'),
+('D3-152', '50', 'X4-015'),
+('D3-154', '50', 'X4-015'),
+('D3-163', '50', 'X4-006'),
+('D3-166', '50', 'X5-009'),
+('D3-167', '50', 'X4-006'),
+('D3-169', '51', 'S6-003'),
+('D3-170', '50', 'X4-005'),
+('D3-177', '50', 'X4-007'),
+('D3-178', '52', 'X4-002'),
+('D3-179', '52', 'X4-022'),
+('D3-180', '50', 'X4-015'),
+('D3-181', '50', 'X4-015'),
+('D3-182', '50', 'X4-015'),
+('D3-183', '50', 'X4-023'),
+('D3-186', '50', 'X4-015'),
+('D3-214', '50', 'X4-005'),
+('D3-215', '50', 'X4-007'),
+('D3-219', '52', 'X2-048'),
+('D3-221', '44', 'X4-010'),
+('D3-222', '44', 'X4-010'),
+('D3-223', '44', 'X4-010'),
+('D3-224', '44', 'X4-010'),
+('D3-225', '44', 'X4-010'),
+('D3-226', '44', 'X4-010'),
+('D3-227', '44', 'X4-010'),
+('D3-228', '44', 'X4-010'),
+('D3-229', '44', ''),
+('D3-230', '44', 'X4-010'),
+('D3-231', '44', 'X4-010'),
+('D3-232', '44', 'X4-010'),
+('D3-233', '44', 'X4-010'),
+('D3-234', '44', 'X4-014'),
+('D3-235', '44', 'X4-014'),
+('D3-241', '50', 'X5-012'),
+('D3-242', '50', 'X5-012'),
+('D3-243', '50', 'X5-012'),
+('D3-244', '50', 'X5-012'),
+('D3-245', '52', 'X4-009'),
+('D3-246', '52', 'X4-009'),
+('D3-247', '52', 'X4-009'),
+('D3-248', '52', 'X4-009'),
+('D3-249', '50', 'X5-012'),
+('D3-250', '50', 'X5-012'),
+('D3-254', '50', 'X5-012'),
+('D3-256', '50', 'X5-012'),
+('D3-257', '50', 'X5-012'),
+('D3-258', '50', 'X5-012'),
+('D3-259', '44', 'X2-052'),
+('D3-260', '44', 'X2-052'),
+('D3-262', '44', 'X2-052'),
+('D3-264', '44', 'X2-052'),
+('D3-266', '44', 'X2-060'),
+('D3-267', '44', ''),
+('D3-269', '44', 'X2-060'),
+('D3-271', '44', ''),
+('D3-272', '44', 'X2-057'),
+('D3-273', '44', 'X2-057'),
+('D3-274', '44', 'X2-057'),
+('D3-277', '44', 'X5-009'),
+('D3-279', '44', 'X5-009'),
+('D3-280', '44', 'X5-009'),
+('D3-281', '44', 'X5-009'),
+('D3-282', '44', 'X5-009'),
+('D3-285', '44', 'X5-009'),
+('D3-286', '44', 'X4-031'),
+('D3-287', '44', 'X4-031'),
+('D3-288', '44', 'X4-031'),
+('D3-289', '44', 'X4-031'),
+('D3-290', '44', 'X4-031'),
+('D3-291', '44', 'X4-031'),
+('D3-292', '44', 'X4-031'),
+('D3-293', '44', 'X4-031'),
+('D3-294', '44', 'X4-031'),
+('D3-295', '44', 'X2-059'),
+('D3-303', '44', 'X2-056'),
+('D3-304', '44', 'X2-056'),
+('D3-305', '44', 'X2-056'),
+('D3-307', '44', 'X2-056'),
+('D3-308', '44', 'X5-009'),
+('D3-310', '44', 'X4-024'),
+('D3-311', '44', 'X2-059'),
+('D3-319', '50', 'X4-007'),
+('D3-355', '44', 'X4-023'),
+('D3-356', '44', 'X4-023'),
+('D3-357', '44', 'X4-023'),
+('D3-358', '44', 'X4-023'),
+('D3-359', '44', 'X4-023'),
+('D3-360', '44', 'X4-023'),
+('D3-362', '44', 'X4-023'),
+('D3-363', '44', 'X4-023'),
+('D3-364', '44', 'X4-023'),
+('D3-371', '45', 'X2-028'),
+('D4-001', '45', 'S7-002'),
+('D4-002', '45', 'S7-002'),
+('D4-003', '45', 'S7-002'),
+('D4-004', '45', 'S7-002'),
+('D4-005', '45', 'S7-002'),
+('D4-006', '45', 'S7-002'),
+('D4-007', '45', 'S7-002'),
+('D4-008', '45', 'S7-002'),
+('D4-009', '45', 'S7-002'),
+('D4-010', '45', 'S7-002'),
+('D4-011', '45', 'S7-002'),
+('D4-012', '45', 'S7-002'),
+('D4-013', '45', 'X5-036'),
+('D4-014', '45', 'X5-036'),
+('D4-015', '49', 'S7-002'),
+('D4-016', '49', 'S7-002'),
+('D4-017', '49', 'S7-002'),
+('D4-018', '49', 'X4-014'),
+('D4-019', '49', 'X4-014'),
+('D4-020', '49', 'X4-014'),
+('D4-021', '49', 'X7-004'),
+('D4-022', '49', 'X7-004'),
+('D4-023', '49', 'X7-004'),
+('D4-024', '49', 'X7-004'),
+('D4-025', '49', 'X7-004'),
+('D4-026', '49', 'X7-004'),
+('D4-027', '49', 'X7-004'),
+('D4-028', '49', 'X7-004'),
+('D4-029', '49', 'X7-004'),
+('D4-030', '49', 'X7-004'),
+('D4-031', '45', 'X5-036'),
+('D4-032', '45', 'X5-036'),
+('D4-033', '45', 'X5-036'),
+('D4-034', '45', 'X5-036'),
+('D4-035', '49', 'X7-004'),
+('D4-036', '49', 'X7-004'),
+('D4-037', '49', 'X7-004'),
+('D4-038', '49', 'X5-008'),
+('D4-039', '49', 'X5-008'),
+('D4-040', '49', 'X5-008'),
+('D4-041', '49', 'X5-008'),
+('D4-042', '49', 'X5-008'),
+('D4-043', '49', 'X5-008'),
+('D4-044', '49', 'X5-008'),
+('D4-045', '49', 'X5-008'),
+('D4-046', '49', 'X5-008'),
+('D4-047', '45', 'X5-036'),
+('D4-048', '45', 'X5-036'),
+('D4-049', '45', 'X5-036'),
+('D4-050', '45', 'X7-002'),
+('D4-051', '45', 'X7-002'),
+('D4-052', '45', 'X7-002'),
+('D4-053', '45', 'X7-002'),
+('D4-054', '45', 'X7-002'),
+('D4-055', '45', 'X7-002'),
+('D4-056', '45', 'X7-002'),
+('D4-057', '45', 'X7-002'),
+('D4-058', '45', 'X7-002'),
+('D4-059', '45', 'X7-002'),
+('D4-060', '45', 'X7-002'),
+('D4-061', '45', ''),
+('D4-062', '45', 'X7-002'),
+('D4-063', '45', 'X7-002'),
+('D4-064', '45', 'X7-002'),
+('D4-065', '45', 'X7-002'),
+('D4-066', '45', ''),
+('D4-067', '45', 'X7-007'),
+('D4-068', '45', 'X7-007'),
+('D4-069', '45', 'X7-007'),
+('D4-070', '45', 'X7-007'),
+('D4-071', '45', 'X7-007'),
+('D4-072', '45', 'X7-007'),
+('D4-073', '45', ''),
+('D4-074', '45', 'X7-007'),
+('D4-075', '45', 'X7-007'),
+('D4-076', '45', 'X7-007'),
+('D4-077', '45', 'X7-007'),
+('D4-078', '49', 'X7-005'),
+('D4-079', '49', ''),
+('D4-080', '49', 'X7-005'),
+('D4-081', '49', 'X7-005'),
+('D4-082', '49', 'X7-005'),
+('D4-083', '49', 'X7-005'),
+('D4-084', '49', 'X7-005'),
+('D4-085', '49', 'X7-005'),
+('D4-086', '49', 'X7-005'),
+('D4-087', '49', 'X7-005'),
+('D4-088', '49', 'X7-005'),
+('D4-089', '49', 'X7-005'),
+('D4-090', '49', 'X7-005'),
+('D4-091', '49', 'X7-005'),
+('D4-092', '49', 'X7-005'),
+('D4-093', '49', 'X5-011'),
+('D4-094', '49', 'X5-011'),
+('D4-095', '49', 'X5-011'),
+('D4-096', '49', 'X5-011'),
+('D4-097', '49', ''),
+('D4-098', '49', 'X5-011'),
+('D4-099', '49', 'X5-011'),
+('D4-100', '49', 'X5-011'),
+('D4-101', '49', 'X5-011'),
+('D4-102', '49', 'X5-011'),
+('D4-103', '49', 'X5-011'),
+('D5-001', '46', 'X7-003'),
+('D5-002', '46', 'X7-003'),
+('D5-003', '46', 'X7-003'),
+('D5-004', '46', 'X7-003'),
+('D5-005', '46', 'X7-003'),
+('D5-006', '46', 'X7-003'),
+('D5-007', '46', 'X7-003'),
+('D5-008', '46', 'X7-003'),
+('D5-009', '46', 'X7-003'),
+('D5-010', '46', 'X7-003'),
+('D5-011', '48', 'X7-008'),
+('D5-012', '48', ''),
+('D5-013', '48', 'X7-008'),
+('D5-014', '48', 'X7-008'),
+('D5-015', '48', 'X7-008'),
+('D5-016', '48', 'X7-008'),
+('D5-017', '48', 'X7-008'),
+('D5-018', '48', 'X7-008'),
+('D5-019', '48', 'X7-008'),
+('D5-020', '48', 'X7-008'),
+('D5-021', '48', 'X7-008'),
+('D5-022', '48', 'X7-008'),
+('D5-023', '48', 'X7-008'),
+('D5-024', '48', 'X7-003'),
+('D5-025', '48', 'X7-003'),
+('D5-026', '46', 'X7-007'),
+('D5-027', '46', 'X7-007'),
+('D5-028', '46', 'X7-007'),
+('D5-029', '46', 'X7-007'),
+('D5-030', '46', 'X7-007'),
+('D5-031', '46', ''),
+('D5-032', '46', 'X7-006'),
+('D5-033', '46', 'X7-006'),
+('D5-034', '46', 'X7-006'),
+('D5-035', '46', ''),
+('D5-036', '46', 'X7-006'),
+('D5-037', '46', 'X7-006'),
+('D5-038', '46', 'X7-006'),
+('D5-039', '46', '');
 
 -- --------------------------------------------------------
 
@@ -801,7 +743,7 @@ INSERT INTO `tbhauler` (`cn_hauler`, `type`, `fix_fleet`) VALUES
 -- Table structure for table `tbloader`
 --
 
-CREATE TABLE `tbloader` (
+CREATE TABLE IF NOT EXISTS `tbloader` (
   `cn_jigsaw` varchar(10) NOT NULL,
   `type` varchar(100) NOT NULL,
   `old_eqp` varchar(100) NOT NULL,
@@ -930,12 +872,12 @@ INSERT INTO `tbloader` (`cn_jigsaw`, `type`, `old_eqp`, `model`, `ellipse_eqp`, 
 -- Table structure for table `travel_speed`
 --
 
-CREATE TABLE `travel_speed` (
-  `id` int(100) NOT NULL,
+CREATE TABLE IF NOT EXISTS `travel_speed` (
+`id` int(100) NOT NULL,
   `id_jalur` int(10) NOT NULL,
   `coal` float NOT NULL,
   `ob` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
 
 --
 -- Dumping data for table `travel_speed`
@@ -969,74 +911,73 @@ INSERT INTO `travel_speed` (`id`, `id_jalur`, `coal`, `ob`) VALUES
 -- Indexes for table `dispatcher`
 --
 ALTER TABLE `dispatcher`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `dispatch_fleet`
 --
 ALTER TABLE `dispatch_fleet`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `dump_spot`
 --
 ALTER TABLE `dump_spot`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `enum`
 --
 ALTER TABLE `enum`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `hauler_capacity`
 --
 ALTER TABLE `hauler_capacity`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `loading_time`
 --
 ALTER TABLE `loading_time`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `master_fleet`
 --
 ALTER TABLE `master_fleet`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_fleet` (`id_fleet`),
-  ADD KEY `cn_hauler` (`cn_hauler`);
+ ADD PRIMARY KEY (`id`), ADD KEY `id_fleet` (`id_fleet`), ADD KEY `cn_hauler` (`cn_hauler`);
 
 --
 -- Indexes for table `set_fleet`
 --
 ALTER TABLE `set_fleet`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `cn_hauler` (`cn_loader`,`status`,`jalur`),
-  ADD KEY `status` (`status`),
-  ADD KEY `jalur` (`jalur`),
-  ADD KEY `pit` (`pit`);
+ ADD PRIMARY KEY (`id`), ADD KEY `cn_hauler` (`cn_loader`,`status`,`jalur`), ADD KEY `status` (`status`), ADD KEY `jalur` (`jalur`), ADD KEY `pit` (`pit`);
+
+--
+-- Indexes for table `shoutbox`
+--
+ALTER TABLE `shoutbox`
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbhauler`
 --
 ALTER TABLE `tbhauler`
-  ADD PRIMARY KEY (`cn_hauler`),
-  ADD KEY `fix_fleet` (`fix_fleet`);
+ ADD PRIMARY KEY (`cn_hauler`), ADD KEY `fix_fleet` (`fix_fleet`);
 
 --
 -- Indexes for table `tbloader`
 --
 ALTER TABLE `tbloader`
-  ADD PRIMARY KEY (`cn_jigsaw`);
+ ADD PRIMARY KEY (`cn_jigsaw`);
 
 --
 -- Indexes for table `travel_speed`
 --
 ALTER TABLE `travel_speed`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -1046,47 +987,52 @@ ALTER TABLE `travel_speed`
 -- AUTO_INCREMENT for table `dispatcher`
 --
 ALTER TABLE `dispatcher`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+MODIFY `id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `dispatch_fleet`
 --
 ALTER TABLE `dispatch_fleet`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+MODIFY `id` int(100) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `dump_spot`
 --
 ALTER TABLE `dump_spot`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `enum`
 --
 ALTER TABLE `enum`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+MODIFY `id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=53;
 --
 -- AUTO_INCREMENT for table `hauler_capacity`
 --
 ALTER TABLE `hauler_capacity`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+MODIFY `id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `loading_time`
 --
 ALTER TABLE `loading_time`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+MODIFY `id` int(100) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=122;
 --
 -- AUTO_INCREMENT for table `master_fleet`
 --
 ALTER TABLE `master_fleet`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+MODIFY `id` int(100) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `set_fleet`
 --
 ALTER TABLE `set_fleet`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+MODIFY `id` int(20) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `shoutbox`
+--
+ALTER TABLE `shoutbox`
+MODIFY `id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `travel_speed`
 --
 ALTER TABLE `travel_speed`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+MODIFY `id` int(100) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=19;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

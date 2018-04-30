@@ -61,6 +61,7 @@
                                 <td>Dev.</td>
                                 <td>:</td>
                             </tr>
+                            <!-- travle plan
                             <tr>
                                 <td rowspan="3">Travel Speed (km/hour)</td>
                                 <td>Act.</td>
@@ -74,6 +75,7 @@
                                 <td>Dev.</td>
                                 <td>:</td>
                             </tr>
+                        -->
                             <tr>
                                 <td colspan="2">Pit</td>
                                 <td>:</td>
@@ -133,6 +135,20 @@
                             </tr>
                         </thead>
                         <tbody id="jumlah_hauler"></tbody>
+                    </table>
+                    <div class="header">
+                        <h5 class="title">Type Hauler</h5>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <?php
+                            $enum = "SELECT `name` FROM `enum` WHERE `enum`.`type` = 'type_hauler'";
+                            $sql_enum = mysqli_query($db->connection, $enum);
+                            while ($data = mysqli_fetch_assoc($sql_enum)) {
+                                echo '<tr><td align="center">' . $data['name'] . '</td></tr>';
+                            }
+                            ?>
+                        </thead>
                     </table>
                 </div>
             </div>
@@ -214,10 +230,20 @@ if (strtoupper($data['material']) == strtoupper('coal')) {
 } else {
     $load = $loading_time['avg_ob'];
 }
-$load = number_format($load, 3);
+
+//hitung travel plan
+if (strtoupper($data['material']) == strtoupper('coal')) {
+    $travel_plan = number_format($data['speed_coal'],2);
+} else {
+    $travel_plan = number_format($data['speed_ob'],2);
+}
+$travel_plan = empty($travel_plan) ? 0 : $travel_plan;
+
 $cc_distance = number_format(($data['distance']*2)/1000, 2);
-$cc_travel = number_format((($data['distance']*2)/1000)/$data['speed'], 2);
+$cc_distance = empty($cc_distance)? 0 : $cc_distance;
+$cc_travel = number_format((($data['distance']*2)/1000)/$travel_plan, 2);
 $cc_loading = number_format((2+$load)/60, 2);
+$cc_loading = empty($cc_loading) ? 0 : $cc_loading;
 $cycle_speed = number_format($cc_distance/($cc_travel+$cc_loading), 2);
 $cycle_speed = empty($cycle_speed) ? 0 : $cycle_speed;
 
@@ -226,12 +252,19 @@ $sum_coal = array_sum($sumcoal);
 $sum_ob = array_sum($sumob);
 
 //Prodty. Fleet
-$cc_sd = number_format($cycle_speed/$cc_distance, 2);
+if ($cc_distance > 0) {
+    $cc_sd = number_format($cycle_speed/$cc_distance, 2);
+} else {
+    $cc_sd = 0;
+}
+
 if (strtoupper($data['material']) == strtoupper('coal')) {
     $sum_sum = number_format($sum_coal, 2);
 } else {
     $sum_sum = number_format($sum_ob, 2);
 }
+$sum_sum = str_replace(',', '', $sum_sum);
+
 //productivity cap
 if (strtoupper($data['material']) == strtoupper('coal')) {
     $prodty_fleet_cap = $data['coal'];
@@ -251,19 +284,11 @@ $prodty_fleet_act = empty($prodty_fleet_act) ? 0 : $prodty_fleet_act;
 $matching_factor = number_format($prodty_fleet_act/$prodty_fleet_cap, 2);
 $matching_factor = empty($matching_factor) ? 0 : $matching_factor;
 
-//travel speed plan
-if (strtoupper($data['material']) == strtoupper('coal')) {
-    $speed_plan = number_format($data['speed_coal'],2);
-} else {
-    $speed_plan = number_format($data['speed_ob'],2);
-}
-$speed_plan = empty($speed_plan) ? 0 : $speed_plan;
-
 //dev travel speed
-$dev_speed = number_format($data['speed']-$speed_plan,2);
+$dev_speed = number_format($data['speed']-$travel_plan,2);
 $dev_speed = empty($dev_speed) ? 0 : $dev_speed;
 
-
+$idid = $data['id'];
 ?>
 
             <div class="col-xs-2" style="padding: 0; float: none; display: inline-block;">
@@ -278,7 +303,7 @@ $dev_speed = empty($dev_speed) ? 0 : $dev_speed;
                     <table class="table" align="center">
                 		<thead align="center">
                 			<tr>
-                                <td><?php echo $data['cn_loader'];?></td>
+                                <td><strong><a href="#" data-toggle="modal" data-target="#exampleModal" data-id="<?php echo $idid;?>" data-cn="<?php echo $data['cn_loader'];?>" id="load_act"><?php echo $data['cn_loader'];?></a></strong></td>
                             </tr>
                             <tr>
                                 <td><?php echo $data['old_eqp'];?></td>
@@ -293,7 +318,7 @@ $dev_speed = empty($dev_speed) ? 0 : $dev_speed;
                                 <td><?php echo $matching_factor;?></td>
                             </tr>
                             <tr>
-                                <td>Plan</td>
+                                <td>-</td>
                             </tr>
                             <tr>
                                 <td><?php echo $prodty_fleet_cap;?></td>
@@ -302,29 +327,31 @@ $dev_speed = empty($dev_speed) ? 0 : $dev_speed;
                                 <td><?php echo $prodty_fleet_act;?></td>
                             </tr>
                             <tr>
-                                <td>Plan</td>
+                                <td>-</td>
                             </tr>
                             <tr>
-                                <td>Dev.</td>
+                                <td>-</td>
                             </tr>
                             <tr>
                             	<td><?php echo $cycle_speed;?></td>
                             </tr>
                             <tr>
-                                <td>Plan</td>
+                                <td>-</td>
                             </tr>
                             <tr>
-                                <td>Dev.</td>
+                                <td>-</td>
+                            </tr>
+                            <!-- travel plan
+                            <tr>
+                                <td><?php echo empty($travel_plan) ? 0 : $travel_plan;?></td>
                             </tr>
                             <tr>
-                                <td><?php echo empty($data['speed']) ? 0 : $data['speed'];?></td>
-                            </tr>
-                            <tr>
-                                <td><?php echo $speed_plan;?></td>
+                                <td><?php echo $travel_plan;?></td>
                             </tr>
                             <tr>
                                 <td><?php echo $dev_speed;?></td>
                             </tr>
+                        -->
                             <tr>
                                 <td><?php echo empty($data['pit']) ? '-' : $data['pit'];?></td>
                             </tr>
@@ -381,10 +408,10 @@ $dev_speed = empty($dev_speed) ? 0 : $dev_speed;
                                 <td><?php echo empty($data['distance']) ? '-' : $data['distance'];?></td>
                             </tr>
                             <tr>
-                                <td>Plan Daily</td>
+                                <td>-</td>
                             </tr>
                             <tr>
-                                <td>Plan Monthly</td>
+                                <td>-</td>
                             </tr>
                 		</thead>
                     </table>
@@ -397,7 +424,8 @@ $dev_speed = empty($dev_speed) ? 0 : $dev_speed;
                             <?php
                             $data_id = $data['id'];
                             $loader = $data['cn_loader'];
-                            $sa = "SELECT `id`,`date`, `time`,`cn_hauler`, (SELECT a.status FROM master_fleet a WHERE a.id_fleet = master_fleet.id_fleet AND a.cn_hauler = master_fleet.cn_hauler ORDER BY a.id DESC LIMIT 1) as `status` FROM `master_fleet` WHERE (`id_fleet`='" . $data_id . "' AND `date` = '" . $date . "'
+                            $sa = "SELECT `id`,`date`, `time`,`master_fleet`.`cn_hauler`, `tbhauler`.`fix_fleet`,(SELECT a.status FROM master_fleet a WHERE a.id_fleet = master_fleet.id_fleet AND a.cn_hauler = master_fleet.cn_hauler ORDER BY a.id DESC LIMIT 1) as `status` FROM `master_fleet`
+                            LEFT JOIN `tbhauler` ON `master_fleet`.`cn_hauler` = `tbhauler`.`cn_hauler` WHERE (`id_fleet`='" . $data_id . "' AND `date` = '" . $date . "'
                              AND `time` >= '{$time}') AND (`id_fleet`='" . $data_id . "' AND `date` = '" . $date . "' AND `time` <= '{$time2}') GROUP BY `cn_hauler` DESC ORDER BY `id` ASC";
                             $xx = mysqli_query($db->connection, $sa);
                             if (mysqli_num_rows($xx) > 0) {
@@ -431,12 +459,38 @@ $dev_speed = empty($dev_speed) ? 0 : $dev_speed;
                                 if ($data['status'] == 'available') {
                                     $jumlah_data++;
                                     $hauler['h' . $jumlah_data] = $jumlah_data;
-                                    echo '<tr><td align="center">' . $data['cn_hauler'] . '</td></tr>';
+                                    if ($data['fix_fleet'] == $loader) {
+                                        echo '<tr bgcolor="#fcb"><td align="center" colspan="2">' . $data['cn_hauler'] . '</td></tr>';
+                                    } else {
+                                        echo '<tr><td align="center" colspan="2">' . $data['cn_hauler'] . '</td></tr>';
+                                    }
+                                    
                                 }
                             }
                             ?>
                         </thead>
                         <?php echo '<tbody id="jumlah_row' . $no . '" data-id="' . $jumlah_data . '"></tbody>';?>
+                    </table>
+
+                    <!-- jumlah hauler per type -->
+                    <div class="header">
+                        <h5 class="title">-</h5>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+
+                            <?php
+                            $hh = "SELECT `enum`.`name` as `type`, (SELECT COUNT(e.name) as count FROM master_fleet mf LEFT JOIN tbhauler th ON mf.cn_hauler = th.cn_hauler LEFT JOIN enum e ON th.type = e.id WHERE mf.id_fleet = '{$data_id}' AND th.type=enum.id AND (SELECT a.status FROM master_fleet a WHERE a.id_fleet = '{$data_id}' AND a.cn_hauler = mf.cn_hauler ORDER BY a.id DESC LIMIT 1) ='available') as `count` FROM `enum` LEFT JOIN `tbhauler` ON `enum`.`id` = `tbhauler`.`type` LEFT JOIN `master_fleet` ON `tbhauler`.`cn_hauler` = `master_fleet`.`cn_hauler` WHERE `enum`.`type` = 'type_hauler' GROUP BY `enum`.`name`";
+                            $xxg = mysqli_query($db->connection, $hh);
+                            while ($data = mysqli_fetch_assoc($xxg)) {
+                                if ($data['count'] > 0) {
+                                    echo '<tr><td align="center">' . $data['count'] . '</td></tr>';
+                                } else {
+                                    echo '<tr><td align="center">-</td></tr>';
+                                }
+                            }
+                            ?>
+                        </thead>
                     </table>
                     </div>
             </div>

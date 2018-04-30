@@ -53,7 +53,9 @@ $db = new crud();
     <script src="assets/js/action.js"></script>
 </head>
 
-<body>
+<body style="
+    background-color:  #f0f0f0;
+">
 <div class="wrapper">
   <?php
   $page = explode('?', $_SERVER['REQUEST_URI'], 2);
@@ -70,12 +72,6 @@ $db = new crud();
     break;
     case "login":
       include "page/login.php";
-    break;
-    case "dev":
-      include "page/pagerep.php";
-    break;
-    case "dev&{$dev}":
-      include "page/pagerep.php";
     break;
   }
   ?>

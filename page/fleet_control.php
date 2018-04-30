@@ -39,10 +39,6 @@ $notif = "";
                                 
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Travel Speed</label>
-                                <input type="text" class="form-control" placeholder="Enter Travel Speed" name="speed" autocomplete="off" />
-                            </div>
-                            <div class="form-group">
                                 <label for="exampleInputEmail1">PIT</label>
                                 <select class="form-control" name="pit" autocomplete="off" id="pit">
                                         <?php

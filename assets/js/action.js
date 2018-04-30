@@ -1,4 +1,15 @@
 $(document).ready(function() {
+    $("#modal_message").css({'display':'none'});
+    $(document).on('click', '#close_message', function() {
+        $("#modal_message").css({'display':'none'});
+        $("#icon_message").css({'display':'block'});
+    });
+    $(document).on('click', '#icon_message', function() {
+        $("#modal_message").css({'display':'block'});
+        $("#icon_message").css({'display':'none'});
+    });
+    
+
     function showNotification(){
         color = Math.floor((Math.random() * 4) + 1);
 
@@ -56,6 +67,42 @@ $(document).ready(function() {
             });
         }
     }
+
+    $("#shoutbox").load('shoutbox.php');
+    setInterval(function(){ $("#shoutbox").load('shoutbox.php'); }, 3000);
+    $(document).on('click', '#post_shoutbox', function() {
+            var data = $("#message_shoutbox").val()
+            $.ajax({
+                type: "POST",
+                data: 'msg=' + data,
+                url: 'json/PostShoutbox.php',
+                success: function(response) {
+                    $("#shoutbox").load('shoutbox.php');
+                },
+                error: function () {
+                    console.log("errr");
+                }
+            });
+        });
+
+    $("#message_shoutbox").keypress(function(e) {
+            if(e.which == 13) {
+                var data = $(this).val()
+                if (data != '') {
+                    $.ajax({
+                        type: "POST",
+                        data: 'msg=' + data,
+                        url: 'json/PostShoutbox.php',
+                        success: function(response) {
+                            $("#shoutbox").load('shoutbox.php');
+                        },
+                        error: function () {
+                            console.log("errr");
+                        }
+                    });
+                }
+            }
+        });
 
 
 
