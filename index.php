@@ -1,6 +1,8 @@
 <?php
 
 include 'system/crud.php';
+include 'system/excel_reader.php';
+
 $db = new crud();
 
 
@@ -120,6 +122,16 @@ if (empty($_SESSION)) {
         case "fleet_all&{$pit}&{$ds}&{$time}&{$time2}":
             include "page/detail_all.php";
         break;
+
+        case "plan_fleet":
+            include "page/fleet_plan.php";
+        break;
+        case "plan_fleet&{$pit}":
+            include "page/fleet_plan.php";
+        break;
+        case "plan_fleet&{$pit}&{$ds}":
+            include "page/fleet_plan.php";
+        break;
       }
       ?>
         <!-- partial:partials/_footer.html -->
@@ -155,6 +167,7 @@ if (empty($_SESSION)) {
 
   </div>
 
+<?php if (substr($page, 0, 5) == 'fleet') { ?>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -197,6 +210,34 @@ if (empty($_SESSION)) {
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="ClearedField('setLoad')">Close</button>
       </div>
+    </div>
+  </div>
+</div>
+<?php } ?>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalPlan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="headermodalfleet">Import File</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" enctype="multipart/form-data">
+      <div class="modal-body">
+          <div class="form-group">
+            <label for="exampleFormControlFile1">Excell file input</label>
+            <input type="file" class="custom-file-input" id="customFile" name="userfile">
+            <div class="invalid-feedback">Only file .xls (Microsoft Excel 2003). <a href="example.xls">Download Example</a></div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" name="import" class="btn btn-success"><span class="ti-import"></span> Import Now!</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+      </form>
     </div>
   </div>
 </div>

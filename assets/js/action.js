@@ -68,8 +68,23 @@ $(document).ready(function() {
         }
     }
 
-    $("#shoutbox").load('shoutbox.php');
-    setInterval(function(){ $("#shoutbox").load('shoutbox.php'); }, 3000);
+    function getChat() {
+        $.getJSON('shoutbox.php', function(jd) {
+            if (jd.data == 'empty') {
+                $('#shoutbox').html('Fields empty');
+            } else {
+                var geting = '';
+                $.each(jd.data, function(){
+                    geting += '<div class="row"><div class="col-md-12"><div class="col-xs-4"><span class=shout><b>' + this['name'] + ' : </b></span></div><div class="col-xs-8"><span class="shout">' + this['msg'] + '</span><br /><span class="shoutdate" style="color: #999; font-size: 12px;">' + this['date'] + '</span></div></div><hr color="#e0cb91" noshade="noshade"></div>';
+                });
+                $('#shoutbox').html(geting);
+            }
+        });
+    }
+
+    getChat();
+    setInterval(function(){ getChat()}, 3000);
+
     $(document).on('click', '#post_shoutbox', function() {
             var data = $("#message_shoutbox").val()
             $.ajax({
@@ -77,7 +92,7 @@ $(document).ready(function() {
                 data: 'msg=' + data,
                 url: 'json/PostShoutbox.php',
                 success: function(response) {
-                    $("#shoutbox").load('shoutbox.php');
+                    getChat();
                 },
                 error: function () {
                     console.log("errr");
@@ -94,7 +109,7 @@ $(document).ready(function() {
                         data: 'msg=' + data,
                         url: 'json/PostShoutbox.php',
                         success: function(response) {
-                            $("#shoutbox").load('shoutbox.php');
+                            getChat();
                         },
                         error: function () {
                             console.log("errr");

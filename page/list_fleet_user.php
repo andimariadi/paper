@@ -52,7 +52,7 @@ $notif = "";
                                         <tr>
                                         	<td><?php echo $no; ?></td>
                                             <td><?php echo $data['date']; ?></td>
-                                        	<td><strong><a href="?detail&<?php echo $data['id']; ?>"><?php echo $data['cn_loader']; ?></a></strong></td>
+                                        	<td><strong><a href="?fleet_detail&<?php echo $data['id']; ?>"><?php echo $data['cn_loader']; ?></a></strong></td>
                                         	<td><?php echo $data['pit']; ?></td>
                                         	<td><?php echo $data['jalur']; ?></td>
                                         	<td><?php echo $data['area']; ?></td>

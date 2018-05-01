@@ -31,6 +31,12 @@
                         <p>List FLeet Control</p>
                     </a>
                 </li>
+                <li<?php if ($page == 'plan_fleet') { echo ' class="active"';} ?>>
+                    <a href="?plan_fleet">
+                        <i class="ti-map"></i>
+                        <p>Plan Fleet Control</p>
+                    </a>
+                </li>
                 <li<?php if (substr($page, 0, 6) == 'hauler') { echo ' class="active"';} ?>>
                     <a href="?hauler">
                         <i class="ti-truck"></i>

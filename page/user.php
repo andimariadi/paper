@@ -82,7 +82,7 @@ if (isset($_POST['save'])) {
                                                     </div>
 
                                                     <div class="col-xs-3 text-right">
-                                                        <a href="?detail&<?php echo $value['id_fleet'];?>" class="btn btn-sm btn-success btn-icon"><i class="fa fa-arrow-right"></i></a>
+                                                        <a href="?fleet_detail&<?php echo $value['id_fleet'];?>" class="btn btn-sm btn-success btn-icon"><i class="fa fa-arrow-right"></i></a>
                                                     </div>
                                                 </div>
                                             </li>

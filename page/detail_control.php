@@ -30,13 +30,18 @@ LEFT JOIN `travel_speed` ON `set_fleet`.`jalur` = `travel_speed`.`id_jalur` WHER
         $loading_time = mysqli_fetch_assoc(mysqli_query($db->connection, "SELECT AVG(`ob`) as `avg_ob`, AVG(`coal`) as `avg_coal` FROM `loading_time` WHERE `type_loader`='" . $data['type'] . "'" . $type . ""));
 
         //sql cycle speed
-        $cyc = mysqli_query($db->connection, "SELECT `tbhauler`.`type`, COUNT(`tbhauler`.`type`) as `count`,`coal`, `ob`, (COUNT(`tbhauler`.`type`)*`coal`) as `count_coal`, (COUNT(`tbhauler`.`type`)*`ob`) as `count_ob` FROM `set_fleet` LEFT JOIN `master_fleet` ON `set_fleet`.`id` = `master_fleet`.`id_fleet` LEFT JOIN `tbhauler` ON `master_fleet`.`cn_hauler` = `tbhauler`.`cn_hauler` LEFT JOIN `hauler_capacity` ON `tbhauler`.`type` = `hauler_capacity`.`type` WHERE `set_fleet`.`id` = '{$id}' GROUP BY `tbhauler`.`type`");
+        $cyc = mysqli_query($db->connection, "SELECT `tbhauler`.`type`, COUNT(`tbhauler`.`type`) as `count`,`coal`, `ob`, (COUNT(`tbhauler`.`type`)*`coal`) as `count_coal`, (COUNT(`tbhauler`.`type`)*`ob`) as `count_ob` FROM `set_fleet` LEFT JOIN `master_fleet` ON `set_fleet`.`id` = `master_fleet`.`id_fleet` LEFT JOIN `tbhauler` ON `master_fleet`.`cn_hauler` = `tbhauler`.`cn_hauler` LEFT JOIN `hauler_capacity` ON `tbhauler`.`type` = `hauler_capacity`.`type` WHERE `set_fleet`.`id` = '{$id}' AND (SELECT a.status FROM master_fleet a WHERE a.id_fleet = '{$id}' AND a.cn_hauler = master_fleet.cn_hauler ORDER BY a.id DESC LIMIT 1) ='available'  GROUP BY `tbhauler`.`type`");
         $no = 0;
+        $sumob = array();
+        $sumcoal = array();
         while ($xx = mysqli_fetch_assoc($cyc)) {
             $no++;
             $sumob['ob' . $no] = $xx['count_ob'];
             $sumcoal['coal' . $no] = $xx['count_coal'];
         }
+
+        $sumcoal = empty($sumcoal) ? array(0) : $sumcoal;
+        $sumob = empty($sumob) ? array(0) : $sumob;
 
 //hitung cycle speed
 if (strtoupper($data['material']) == strtoupper('coal')) {
@@ -301,7 +306,7 @@ $matching_factor = number_format($prodty_fleet_act/$prodty_fleet_cap, 2);
                                 $next_date = $i > 23 ? date('Y-m-d', strtotime($data['date'] . '+1 days')) : $date;
                                 echo '<div class="col-xs-1" style="padding: 0;border-left: 1px solid #CCC5B9;border-bottom: 1px solid #CCC5B9;border-right: 1px solid #CCC5B9;"><table class="table" style="margin-bottom: 0;"><tr><th>' . $num . ':00</th></tr>';
 //
-                                $sa = "SELECT `id`,cast(concat(`date`, ' ', `time`) as datetime) as dt,`master_fleet`.`cn_hauler`, `tbhauler`.`fix_fleet`, (SELECT a.status FROM master_fleet a WHERE a.id_fleet = master_fleet.id_fleet AND a.cn_hauler = master_fleet.cn_hauler AND cast(concat(a.date, ' ', a.time) as datetime) BETWEEN '2018-04-30 06:00' AND '2018-04-30 09:59:59' ORDER BY a.id DESC LIMIT 1) as `status` FROM `master_fleet` LEFT JOIN `tbhauler` ON `master_fleet`.`cn_hauler` = `tbhauler`.`cn_hauler` WHERE `id_fleet`='{$id}'  AND cast(concat(`date`, ' ', `time`) as datetime) BETWEEN '" . $date . " {$time_start}' AND '" . $next_date . " {$num}:59:59' GROUP BY `cn_hauler` DESC ORDER BY `id` ASC";
+                                $sa = "SELECT `id`,cast(concat(`date`, ' ', `time`) as datetime) as dt,`master_fleet`.`cn_hauler`, `tbhauler`.`fix_fleet`, (SELECT a.status FROM master_fleet a WHERE a.id_fleet = master_fleet.id_fleet AND a.cn_hauler = master_fleet.cn_hauler AND cast(concat(a.date, ' ', a.time) as datetime) BETWEEN '" . $date . " {$time_start}' AND '" . $next_date . " {$num}:59:59' ORDER BY a.id DESC LIMIT 1) as `status` FROM `master_fleet` LEFT JOIN `tbhauler` ON `master_fleet`.`cn_hauler` = `tbhauler`.`cn_hauler` WHERE `id_fleet`='{$id}'  AND cast(concat(`date`, ' ', `time`) as datetime) BETWEEN '" . $date . " {$time_start}' AND '" . $next_date . " {$num}:59:59' GROUP BY `cn_hauler` DESC ORDER BY `id` ASC";
                                 $xx = mysqli_query($db->connection, $sa);
                                 if (mysqli_num_rows($xx) > 0) {
                                     $s = "";

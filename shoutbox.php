@@ -1,25 +1,20 @@
 <?php
-
-include 'system/crud.php';
+require 'system/crud.php';
 $db = new crud();
+$query = "SELECT `date`, `time`, `message`, `first_name`, `last_name` FROM `shoutbox` LEFT JOIN `dispatcher` ON `shoutbox`.`username` = `dispatcher`.`id` ORDER BY `shoutbox`.`id` DESC";
 
-
-$shoutbox=$db->query("SELECT * FROM shoutbox ORDER BY id DESC");
-while($d=mysqli_fetch_array($shoutbox)){
-  $pesan = $d['message'];
-  $pesan = str_replace(":-)", "<img src=\"smiley/1.gif\">", $pesan);
-  $pesan = str_replace(":-(", "<img src=\"smiley/2.gif\">", $pesan);
-  $pesan = str_replace(";-)", "<img src=\"smiley/3.gif\">", $pesan);
-  $pesan = str_replace(";-D", "<img src=\"smiley/4.gif\">", $pesan);
-  $pesan = str_replace(";;-)", "<img src=\"smiley/5.gif\">", $pesan);
-  $pesan = str_replace("<:D>", "<img src=\"smiley/6.gif\">", $pesan);
-  echo '<div class="row"><div class="col-md-12"><div class="col-xs-4">
-              <span class=shout><b>' . $d['username'] . ' : </b></span>
-            </div>
-            <div class="col-xs-8"><span class="shout">' . $pesan . '</span>
-            <br /><span class="shoutdate" style="color: #999; font-size: 12px;">' . $d['date'] . ' / ' . $d['time'] . ' WIB</span>
-            </div>
-            </div><hr color="#e0cb91" noshade="noshade">
-        </div>';
+$hasil = mysqli_query($db->connection, $query);
+if(mysqli_num_rows($hasil) > 0 ){
+  $response = array();
+  $response["data"] = array();
+  while($x = mysqli_fetch_array($hasil)){
+    $h['msg'] = str_replace(array(':-)', ':-(', ';-)', ';-D', ';;-)', '<:D>'), array('<img src="smiley/1.gif" />', '<img src="smiley/2.gif" />', "<img src=\"smiley/3.gif\">", "<img src=\"smiley/4.gif\">", "<img src=\"smiley/5.gif\">", "<img src=\"smiley/6.gif\">"), $x['message']);
+    $h['name'] = $x["first_name"] . ' ' . $x["last_name"];
+    $h['date'] = $x['date'] . ' / ' . $x['time'] . ' WIB';
+    array_push($response["data"], $h);
+  }
+}else {
+  $response["data"]="empty";  
 }
+echo json_encode($response);
 ?>

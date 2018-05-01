@@ -215,13 +215,18 @@ $no++;
         $loading_time = mysqli_fetch_assoc(mysqli_query($db->connection, $average_sql));
 
         //sql cycle speed
-        $cyc = mysqli_query($db->connection, "SELECT `tbhauler`.`type`, COUNT(`tbhauler`.`type`) as `count`,`coal`, `ob`, (COUNT(`tbhauler`.`type`)*`coal`) as `count_coal`, (COUNT(`tbhauler`.`type`)*`ob`) as `count_ob` FROM `set_fleet` LEFT JOIN `master_fleet` ON `set_fleet`.`id` = `master_fleet`.`id_fleet` LEFT JOIN `tbhauler` ON `master_fleet`.`cn_hauler` = `tbhauler`.`cn_hauler` LEFT JOIN `hauler_capacity` ON `tbhauler`.`type` = `hauler_capacity`.`type` WHERE `set_fleet`.`id` = '{$data['id']}' GROUP BY `tbhauler`.`type`");
+        $cyc = mysqli_query($db->connection, "SELECT `tbhauler`.`type`, COUNT(`tbhauler`.`type`) as `count`,`coal`, `ob`, (COUNT(`tbhauler`.`type`)*`coal`) as `count_coal`, (COUNT(`tbhauler`.`type`)*`ob`) as `count_ob` FROM `set_fleet` LEFT JOIN `master_fleet` ON `set_fleet`.`id` = `master_fleet`.`id_fleet` LEFT JOIN `tbhauler` ON `master_fleet`.`cn_hauler` = `tbhauler`.`cn_hauler` LEFT JOIN `hauler_capacity` ON `tbhauler`.`type` = `hauler_capacity`.`type` WHERE `set_fleet`.`id` = '{$data['id']}' AND (SELECT a.status FROM master_fleet a WHERE a.id_fleet = '{$data['id']}' AND a.cn_hauler = master_fleet.cn_hauler ORDER BY a.id DESC LIMIT 1) ='available'  GROUP BY `tbhauler`.`type`");
+
         $anu = 0;
+        $sumob = array();
+        $sumcoal = array();
         while ($xx = mysqli_fetch_assoc($cyc)) {
             $anu++;
             $sumob['ob' . $anu] = $xx['count_ob'];
             $sumcoal['coal' . $anu] = $xx['count_coal'];
         }
+        $sumcoal = empty($sumcoal) ? array(0) : $sumcoal;
+        $sumob = empty($sumob) ? array(0) : $sumob;
 
 
 //hitung cycle speed
